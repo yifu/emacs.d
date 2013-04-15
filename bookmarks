@@ -1,0 +1,40 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("(tramp) Auto-save and Backup"
+ (front-context-string . "\n   On some vers")
+ (rear-context-string . "rary directory.\n")
+ (position . 71291)
+ (filename . "/Applications/Emacs.app/Contents/Resources/info/tramp")
+ (info-node . "Auto-save and Backup")
+ (handler . Info-bookmark-jump))
+("org mode"
+ (front-context-string . "\n1.3 Activation\n")
+ (rear-context-string . "p: Introduction\n")
+ (position . 28893)
+ (filename . "/Applications/Emacs.app/Contents/Resources/info/org")
+ (info-node . "Activation")
+ (handler . Info-bookmark-jump))
+("eshell"
+ (front-context-string . "\nEshell\n******\n\n")
+ (rear-context-string . "ll?,  Up: (dir)\n")
+ (position . 1061)
+ (filename . "/Applications/Emacs.app/Contents/Resources/info/eshell")
+ (info-node . "Top")
+ (handler . Info-bookmark-jump))
+("Info tutorial"
+ (front-context-string . "\n1.6 Menus and t")
+ (rear-context-string . "Getting Started\n")
+ (position . 16900)
+ (filename . "/Applications/Emacs.app/Contents/Resources/info/info")
+ (info-node . "Help-M")
+ (handler . Info-bookmark-jump))
+("magit"
+ (front-context-string . "\n6 Staging and C")
+ (rear-context-string . "files,  Up: Top\n")
+ (position . 10337)
+ (filename . "/Users/keugaerg/.emacs.d/elpa/magit-1.2.0/magit")
+ (info-node . "Staging and Committing")
+ (handler . Info-bookmark-jump))
+)
