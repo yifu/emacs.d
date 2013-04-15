@@ -189,6 +189,33 @@
 				  )))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mon Apr 15 23:16:45 2013
+(defun list-my-installed-packages ()
+  (remove-if-not
+   (lambda (x)
+     (and	;(not (memq x jpk-packages))
+      (not (package-built-in-p x))
+      (package-installed-p x)))
+   (mapcar 'car package-archive-contents)))
+
+(setq my-packages-list-filename "~/.emacs.d/my-packages.list")
+
+(defun save-my-installed-packages ()
+  (interactive)
+  (with-temp-buffer
+    (insert
+     (with-output-to-string
+       (prin1 (list-my-installed-packages))))
+    (write-file my-packages-list-filename)))
+
+(defun load-my-packages-list ()
+  (interactive)
+  (setq my-packages
+	(with-temp-buffer
+	  (insert-file-contents-literally my-packages-list-filename)
+	  (read (current-buffer)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (progn
   (message "Upgrade packages at %s." (format-time-string "%H:%M-%S"))
