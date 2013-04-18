@@ -7,6 +7,7 @@
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(menu-bar-mode -1)
 (column-number-mode 1)
 (global-hl-line-mode 1)
 (global-visual-line-mode 1)
@@ -15,6 +16,108 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
 (ffap-bindings)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; YBA jeu. 18 avril 2013 10:33:45 CEST
+(setq-default indent-tabs-mode nil)
+(add-hook 'prog-mode-hook 'linum-mode)
+
+(c-add-style "ub"
+             '("bsd"
+               (c-basic-offset . 4)     ; Guessed value
+               (c-offsets-alist
+                (block-close . 0)       ; Guessed value
+                (case-label . 0)        ; Guessed value
+                (catch-clause . 0)      ; Guessed value
+                (defun-block-intro . +) ; Guessed value
+                (defun-close . 0)       ; Guessed value
+                (defun-open . 0)        ; Guessed value
+                (else-clause . 0)       ; Guessed value
+                (member-init-intro . 0) ; Guessed value
+                (statement . 0)             ; Guessed value
+                (statement-block-intro . +) ; Guessed value
+                (statement-case-intro . +)  ; Guessed value
+                (substatement . +)      ; Guessed value
+                (substatement-open . 0) ; Guessed value
+                (topmost-intro . 0)     ; Guessed value
+                (access-label . -)
+                (annotation-top-cont . 0)
+                (annotation-var-cont . +)
+                (arglist-close . c-lineup-close-paren)
+                (arglist-cont c-lineup-gcc-asm-reg 0)
+                (arglist-cont-nonempty . c-lineup-arglist)
+                (arglist-intro . +)
+                (block-open . 0)
+                (brace-entry-open . 0)
+                (brace-list-close . 0)
+                (brace-list-entry . 0)
+                (brace-list-intro . +)
+                (brace-list-open . 0)
+                (c . c-lineup-C-comments)
+                (class-close . 0)
+                (class-open . 0)
+                (comment-intro . c-lineup-comment)
+                (composition-close . 0)
+                (composition-open . 0)
+                (cpp-define-intro c-lineup-cpp-define +)
+                (cpp-macro . -1000)
+                (cpp-macro-cont . +)
+                (do-while-closure . 0)
+                (extern-lang-close . 0)
+                (extern-lang-open . 0)
+                (friend . 0)
+                (func-decl-cont . +)
+                (inclass . +)
+                (incomposition . +)
+                (inexpr-class . 0)
+                (inexpr-statement . +)
+                (inextern-lang . +)
+                (inher-cont . c-lineup-multi-inher)
+                (inher-intro . +)
+                (inlambda . c-lineup-inexpr-block)
+                (inline-close . 0)
+                (inline-open . 0)
+                (inmodule . +)
+                (innamespace . +)
+                (knr-argdecl . 0)
+                (knr-argdecl-intro . +)
+                (label . 0)
+                (lambda-intro-cont . +)
+                (member-init-cont . c-lineup-multi-inher)
+                (module-close . 0)
+                (module-open . 0)
+                (namespace-close . 0)
+                (namespace-open . 0)
+                (objc-method-args-cont . c-lineup-ObjC-method-args)
+                (objc-method-call-cont c-lineup-ObjC-method-call-colons c-lineup-ObjC-method-call +)
+                (objc-method-intro .
+                                   [0])
+                (statement-case-open . 0)
+                (statement-cont . +)
+                (stream-op . c-lineup-streamop)
+                (string . -1000)
+                (substatement-label . 0)
+                (template-args-cont c-lineup-template-args +)
+                (topmost-intro-cont . c-lineup-topmost-intro-cont))))
+
+(setq c-echo-syntactic-information-p t)
+
+(add-hook 'c-mode-hook '(lambda () (c-set-style "ub")))
+(add-hook 'c++-mode-hook '(lambda () (c-set-style "ub")))
+
+(custom-set-variables
+ '(help-at-pt-timer-delay 0.9)
+ '(help-at-pt-display-when-idle '(flymake-overlay)))
+
+;;(add-hook 'c-mode-hook '(lambda () (flymake-mode)))
+;;(add-hook 'c++-mode-hook '(lambda () (flymake-mode)))
+(add-hook 'find-file-hook 'flymake-find-file-hook)
+(global-set-key [f2] 'flymake-display-err-menu-for-current-line)
+(global-set-key [f3] 'flymake-goto-prev-error)
+(global-set-key [f4] 'flymake-goto-next-error)
+
+(setq compilation-scroll-output t)
+(setq compilation-auto-jump-to-first-error t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; SMTP configuration:
@@ -127,7 +230,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/powerline/")
 (require 'powerline)
-(powerline-default)
+
+(if (fboundp 'powerline-default)
+    (powerline-default))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'icicles)
@@ -210,10 +315,15 @@
 
 (defun load-my-packages-list ()
   (interactive)
-  (setq my-packages
-	(with-temp-buffer
-	  (insert-file-contents-literally my-packages-list-filename)
-	  (read (current-buffer)))))
+  (let ((my-packages
+	 (with-temp-buffer
+	   (insert-file-contents-literally my-packages-list-filename)
+	   (read (current-buffer)))))
+    (dolist (p my-packages)
+      (message (symbol-name p))
+      (if (not (package-installed-p  (symbol-name p)))
+	  (package-install p)))))
+    
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
