@@ -116,9 +116,35 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") 'append)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
 (package-initialize)
+
+(defun upgrade-my-packages ()
+  (message "Upgrade packages at %s." (format-time-string "%H:%M-%S"))
+  (list-packages)
+  (with-current-buffer "*Packages*"
+    (package-menu-mark-upgrades)
+    (package-menu-execute t)
+    (kill-buffer))
+  (message "Upgrade packages done at %s." (format-time-string "%H:%M-%S")))
+
+(defun my-packages-too-old-p ()
+  (cl-labels ((time-to-date (time) (format-time-string "%c" time)))
+    (< 7
+       (days-between
+	(time-to-date (current-time))
+	(time-to-date
+	 (nth 5 (file-attributes package-user-dir)))))))
+
+(add-hook 'after-init-hook
+	  (lambda ()
+	    (when (my-packages-too-old-p)
+		(upgrade-my-packages))))
+
+;; (days-between
+;;  (format-time-string "%c" (current-time))
+;;  (format-time-string "%c" (nth 5 (file-attributes "~/"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'color-theme)
@@ -217,14 +243,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(progn
-  (message "Upgrade packages at %s." (format-time-string "%H:%M-%S"))
-  (list-packages)
-  (with-current-buffer "*Packages*"
-    (package-menu-mark-upgrades)
-    (package-menu-execute t)
-    (kill-buffer))
-  (message "Upgrade packages done at %s." (format-time-string "%H:%M-%S")))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
