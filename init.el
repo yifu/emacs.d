@@ -326,6 +326,24 @@
     
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; YBA ven. 19 avril 2013 17:22:43 CEST
+(setq counter 0)
+(defun inc-channels-indices ()
+  (interactive)
+  (while (search-forward-regexp "<channel> \\(0\\)")
+    (replace-match (number-to-string counter) t t nil 1)
+    (setq counter (+ 1 counter))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; YBA ven. 19 avril 2013 17:32:00 CEST
+(defun kill-empty-line (beg end)
+  (interactive "r")
+  (save-excursion
+    (goto-char beg)
+    (while (and (search-forward-regexp "^$") (< (point) end))
+      (kill-line))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (progn
   (message "Upgrade packages at %s." (format-time-string "%H:%M-%S"))
