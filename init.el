@@ -233,24 +233,26 @@
   (message
    "Upgrade packages at %s."
    (format-time-string "%H:%M-%S"))
-
   (list-packages)
   (with-current-buffer "*Packages*"
     (package-menu-mark-upgrades)
     (package-menu-execute t)
     (kill-buffer))
-
   (message
    "Upgrade packages done at %s."
    (format-time-string "%H:%M-%S")))
 
 (defun my-packages-too-old-p ()
-  (cl-labels ((time-to-date (time) (format-time-string "%c" time)))
-    (< 7
-       (days-between
-	(time-to-date (current-time))
-	(time-to-date
-	 (nth 5 (file-attributes package-user-dir)))))))
+  (let ((iso-8601-time-format "%Y-%m-%dT%T%z"))
+   (cl-labels
+       ((time-to-date
+         (time)
+         (format-time-string iso-8601-time-format time)))
+     (< 7
+        (days-between
+         (time-to-date (current-time))
+         (time-to-date
+          (nth 5 (file-attributes package-user-dir))))))))
 
 (add-hook 'after-init-hook
 	  (lambda ()
