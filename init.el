@@ -170,10 +170,11 @@
 
   ;; This code is by Trent Buck <trentbuck@gmail.com>
   ;; It is in the Public Domain.
-  (setq rcirc-bots '("fsbot" "birny" "lisppaste" "specbot" "clojurebot"))
-  (setq rcirc-pals
-        '("nicferrier" "ivan-kanis" "technomancy" "`fogus" "Raynes"
-          "rhickey" "cemerick" "amalloy"))
+  (setq rcirc-bots
+	'("fsbot" "birny" "lisppaste" "specbot" "clojurebot")
+	rcirc-pals
+	'("nicferrier" "ivan-kanis" "technomancy" "`fogus" "Raynes"
+	  "rhickey" "cemerick" "amalloy"))
 
   (defface rcirc-pal-nick-face
     '((((class color) (background dark))  :foreground "PaleGreen")
@@ -205,8 +206,9 @@
  'tramp-default-method-alist
  '("\\`localhost\\'" "\\`root\\'" "su"))
 
-(add-to-list 'tramp-default-proxies-alist
-	     '((regexp-quote "vps20966.ovh.net") "\\`root\\'" "/ssh:%h:"))
+(add-to-list
+ 'tramp-default-proxies-alist
+ '((regexp-quote "vps20966.ovh.net") "\\`root\\'" "/ssh:%h:"))
 
 ;; Avoid Backup files when using sudo or su.
 (setq backup-enable-predicate
@@ -219,9 +221,45 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") 'append)
+(add-to-list
+ 'package-archives
+ '("melpa" . "http://melpa.milkbox.net/packages/") 'append)
+(add-to-list
+ 'package-archives
+ '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
 (package-initialize)
+
+(defun upgrade-my-packages ()
+  (message
+   "Upgrade packages at %s."
+   (format-time-string "%H:%M-%S"))
+
+  (list-packages)
+  (with-current-buffer "*Packages*"
+    (package-menu-mark-upgrades)
+    (package-menu-execute t)
+    (kill-buffer))
+
+  (message
+   "Upgrade packages done at %s."
+   (format-time-string "%H:%M-%S")))
+
+(defun my-packages-too-old-p ()
+  (cl-labels ((time-to-date (time) (format-time-string "%c" time)))
+    (< 7
+       (days-between
+	(time-to-date (current-time))
+	(time-to-date
+	 (nth 5 (file-attributes package-user-dir)))))))
+
+(add-hook 'after-init-hook
+	  (lambda ()
+	    (when (my-packages-too-old-p)
+		(upgrade-my-packages))))
+
+;; (days-between
+;;  (format-time-string "%c" (current-time))
+;;  (format-time-string "%c" (nth 5 (file-attributes "~/"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'color-theme)
@@ -241,8 +279,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 (require 'slime)
-(add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
-(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+(add-hook 'lisp-mode-hook
+	  (lambda () (slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook
+	  (lambda () (inferior-slime-mode t)))
 (setq slime-net-coding-system 'utf-8-unix)
 
 ;;(slime-setup '(slime-fancy slime-asdf))
@@ -252,7 +292,8 @@
 
 ;;(add-hook 'slime-connected-hook 'slime-redirect-inferior-output)
 
-;; Optionally, specify the lisp program you are using. Default is "lisp"
+;; Optionally, specify the lisp program you are using.
+;; Default is "lisp"
 (setq inferior-lisp-program "clisp")
 ;;(add-hook 'slime-mode-hook 'slime)
 
@@ -345,14 +386,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(progn
-  (message "Upgrade packages at %s." (format-time-string "%H:%M-%S"))
-  (list-packages)
-  (with-current-buffer "*Packages*"
-    (package-menu-mark-upgrades)
-    (package-menu-execute t)
-    (kill-buffer))
-  (message "Upgrade packages done at %s." (format-time-string "%H:%M-%S")))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
