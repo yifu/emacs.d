@@ -396,7 +396,18 @@
       (kill-line))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; YBA jeu. 25 avril 2013 10:14:03 CEST
+(defun kill-line-regexp (beg end regexp)
+  "Kill lines in region containing a regular expression."
+  (interactive "r\nsregexp: ")
+  (save-excursion
+    (goto-char beg)
+    (while (and (re-search-forward regexp end t) (< (point) end))
+      (forward-line 0)
+      (let ((kill-whole-line t))
+        (kill-line)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
