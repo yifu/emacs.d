@@ -5,12 +5,18 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode -1)
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+(when (fboundp 'menu-bar-mode)
+  (menu-bar-mode -1))
+(when (fboundp 'global-visual-line-mode)
+  (global-visual-line-mode 1))
+
 (column-number-mode 1)
 (global-hl-line-mode 1)
-(global-visual-line-mode 1)
+
 (show-paren-mode 1)
 (blink-cursor-mode -1)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -206,9 +212,10 @@
  'tramp-default-method-alist
  '("\\`localhost\\'" "\\`root\\'" "su"))
 
-(add-to-list
- 'tramp-default-proxies-alist
- '((regexp-quote "vps20966.ovh.net") "\\`root\\'" "/ssh:%h:"))
+(when (fboundp 'tramp-default-proxies-alist)
+  (add-to-list
+   'tramp-default-proxies-alist
+   '((regexp-quote "vps20966.ovh.net") "\\`root\\'" "/ssh:%h:")))
 
 ;; Avoid Backup files when using sudo or su.
 (setq backup-enable-predicate
@@ -220,7 +227,8 @@
 		  (member method '("su" "sudo"))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'package)
+(when (require 'package nil t)
+
 (add-to-list
  'package-archives
  '("melpa" . "http://melpa.milkbox.net/packages/") 'append)
@@ -258,14 +266,14 @@
 	  (lambda ()
 	    (when (my-packages-too-old-p)
 		(upgrade-my-packages))))
-
+)
 ;; (days-between
 ;;  (format-time-string "%c" (current-time))
 ;;  (format-time-string "%c" (nth 5 (file-attributes "~/"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'color-theme)
-(color-theme-molokai)
+(when (require 'color-theme nil t)
+(color-theme-molokai))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/powerline/")
@@ -275,8 +283,8 @@
     (powerline-default))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'icicles)
-(icy-mode 1)
+(when (require 'icicles nil t)
+(icy-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
@@ -300,9 +308,10 @@
 ;;(add-hook 'slime-mode-hook 'slime)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-hook 'clojure-mode-hook '(lambda () (paredit-mode)))
-(add-hook 'emacs-lisp-mode-hook '(lambda () (paredit-mode)))
-(add-hook 'lisp-mode-hook '(lambda () (paredit-mode)))
+(when (require 'paredit "" t)
+  (add-hook 'clojure-mode-hook '(lambda () (paredit-mode)))
+  (add-hook 'emacs-lisp-mode-hook '(lambda () (paredit-mode)))
+  (add-hook 'lisp-mode-hook '(lambda () (paredit-mode))))
 
 (add-hook 'prog-mode-hook '(lambda () (linum-mode)))
 (add-hook 'clojure-mode-hook '(lambda () (linum-mode)))
