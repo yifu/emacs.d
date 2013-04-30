@@ -253,60 +253,51 @@
 
 (defun my-packages-too-old-p ()
   (let ((iso-8601-time-format "%Y-%m-%dT%T%z"))
-   (cl-labels
-       ((time-to-date
-         (time)
-         (format-time-string iso-8601-time-format time)))
-     (< 7
-        (days-between
-         (time-to-date (current-time))
-         (time-to-date
-          (nth 5 (file-attributes package-user-dir))))))))
+   (defun time-to-date (time)
+         (format-time-string iso-8601-time-format time))
+   (< 7
+      (days-between
+       (time-to-date (current-time))
+       (time-to-date
+        (nth 5 (file-attributes package-user-dir)))))))
 
 (add-hook 'after-init-hook
 	  (lambda ()
 	    (when (my-packages-too-old-p)
-		(upgrade-my-packages))))
-)
+		(upgrade-my-packages)))))
 ;; (days-between
 ;;  (format-time-string "%c" (current-time))
 ;;  (format-time-string "%c" (nth 5 (file-attributes "~/"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'color-theme nil t)
-(color-theme-molokai))
+  (color-theme-molokai))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/powerline/")
-(require 'powerline)
-
-(if (fboundp 'powerline-default)
-    (powerline-default))
-
+(if (require 'powerline nil t)
+    (progn
+      (if (fboundp 'powerline-default)
+          (powerline-default)))
+  (message "INIT.EL: No powerline found."))
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'icicles nil t)
-(icy-mode 1))
+  (icy-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-(require 'slime)
-(add-hook 'lisp-mode-hook
-	  (lambda () (slime-mode t)))
-(add-hook 'inferior-lisp-mode-hook
-	  (lambda () (inferior-slime-mode t)))
-(setq slime-net-coding-system 'utf-8-unix)
-
-;;(slime-setup '(slime-fancy slime-asdf))
-;;(slime-setup '(slime-repl))
-(slime-setup '(slime-fancy))
-;;(slime-setup)
-
-;;(add-hook 'slime-connected-hook 'slime-redirect-inferior-output)
-
-;; Optionally, specify the lisp program you are using.
-;; Default is "lisp"
-(setq inferior-lisp-program "clisp")
-;;(add-hook 'slime-mode-hook 'slime)
+(if (and
+       (load (expand-file-name "~/quicklisp/slime-helper.el") t)
+       (require 'slime nil t))
+    (progn
+      (add-hook 'lisp-mode-hook
+                (lambda () (slime-mode t)))
+      (add-hook 'inferior-lisp-mode-hook
+                (lambda () (inferior-slime-mode t)))
+      (setq slime-net-coding-system 'utf-8-unix)
+      (slime-setup '(slime-fancy))
+      (setq inferior-lisp-program "clisp"))
+  (message "INIT.EL: No slime helper found."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'paredit "" t)
