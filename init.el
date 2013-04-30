@@ -117,7 +117,8 @@
 
 ;;(add-hook 'c-mode-hook '(lambda () (flymake-mode)))
 ;;(add-hook 'c++-mode-hook '(lambda () (flymake-mode)))
-(add-hook 'find-file-hook 'flymake-find-file-hook)
+(when (fboundp 'flymake-find-file-hook)
+  (add-hook 'find-file-hook 'flymake-find-file-hook))
 (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
 (global-set-key [f3] 'flymake-goto-prev-error)
 (global-set-key [f4] 'flymake-goto-next-error)
