@@ -1,3 +1,130 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; YBA ven. 03 mai 2013 10:41:17 CEST
+
+;; Load CEDET.
+;; See cedet/common/cedet.info for configuration details.
+;; IMPORTANT: Tou must place this *before* any CEDET component (including
+;; EIEIO) gets activated by another package (Gnus, auth-source, ...).
+(load-file "~/bzr/cedet/cedet-devel-load.el")
+
+;; Add further minor-modes to be enabled by semantic-mode.
+;; See doc-string of `semantic-default-submodes' for other things
+;; you can use here.
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+(add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
+
+;; Enable Semantic
+(semantic-mode t)
+
+;; Enable EDE (Project Management) features
+(global-ede-mode t)
+
+(require 'semantic/ia)
+;(require 'semantic/bovine/gcc)
+(require 'semantic/bovine/clang)
+(semantic-clang-activate)
+(semantic-add-system-include "/usr/local/include/boost/" 'c++-mode)
+
+(ede-cpp-root-project "pdk-software"
+                      :name "pdk software"
+                      :file "~/git/pdk-software/CMakeLists.txt"
+                      :include-path (get-header-directories "~/git/pdk-software")
+                      :system-include-path nil
+                      :spp-table '(("LINUX" . "")
+                                   ("_REENTRANT" . "")
+                                   ("MULTISESSION_TOE" . "")
+                                   ("_FORTIFY_SOURCE" . "")
+                                   ("FORCE_INLINE" . "__attribute__((always_inline)) inline")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba ven. 03 mai 2013 11:58:40 CEST
+(defun directory-p (attr)
+  (let ((file-type (car attr)))
+   (and
+    (not (stringp file-type))
+    (car attr))))
+
+;; (defun yba-some (list)
+;;   (defun yba-some-aux (acc list)
+;;     (if list
+;;         (yba-some-aux (or acc (car list)) (cdr list))
+;;         acc))
+;;   (yba-some-aux nil list))
+
+(defun yba-some (list) (not (null (member t list))))
+;;(member t '( nil nil nil))
+;;(yba-some '(nil t nil))
+;;(yba-some '(nil nil nil))
+;;(yba-some nil)
+;;(yba-some '(t))
+
+(defun hidden-file-p (file-name)
+  (string= "." (substring file-name 0 1)))
+;;(hidden-file-p ".")
+;;(hidden-file-p "..")
+;;(hidden-file-p "toto.hpp")
+;;(hidden-file-p ".toto.cpp")
+
+(defun header-directory-p (dir)
+  (yba-some
+   (mapcar
+    (lambda (file-name)
+      (when (not (hidden-file-p file-name))
+        (not (null (string-match "\\.hp?p?$" file-name)))))
+    (directory-files dir))))
+;; (length (directory-files "~/git/pdk-software/build/clang_debug/lib"))
+;; (directory-files "~/git/pdk-software")
+;; (string-match "\\.hp?p?$" "toto")
+;; (string-match "\\.hp?p?$" "ouch")
+;; (string-match "\\.hp?p?$" "bla.hpp")
+;; (string-match "\\.hp?p?$" "bla.h")
+;; (string-match "\\.hp?p?$" "bla.c")
+;; (string-match "\\.hp?p?$" "bla.hpp.o")
+
+(defun list-dir-child-of (dir)
+  (delete
+   nil
+   (mapcar
+    (lambda (file)
+      (let ((file-name (car file))
+            (file-attr (cdr file)))
+       (when (and
+              (directory-p file-attr)
+              (not (hidden-file-p file-name)))
+         (concat dir "/" file-name))))
+    (directory-files-and-attributes dir))))
+;; (car "toto")
+;; (list-dir-of-child "~/git/pdk-software")
+;; (list-dir-of-child "~/git/pdk-software/GXALITE/config")
+;; (directory-p "~/git/pdk-software/GXALITE/config/config_cleanup.py")
+;;(directory-files-and-attributes "~/git/pdk-software/GXALITE/config")
+
+(defun get-header-directories (root)
+  "return a list of string. Those string are path to directories containing cpp header files. The path takes the root parameter as the root for the path."
+  (interactive "D")
+  (setq header-directories '())
+  ;; Check the root itself
+  (when (header-directory-p root)
+    (push root header-directories))
+
+  ;; Make the BST:
+  (setq queue (list-dir-child-of root))
+  (while queue
+    (setq dir (pop queue))
+    (when (header-directory-p dir)
+      (push dir header-directories))
+    (nconc queue (list-dir-child-of dir)))
+
+  ;; Prepare the result removing the root prefix.
+  (mapcar
+   (lambda (dir)
+     (substring dir (length root)))
+   header-directories))
+
+;;(get-header-directories "~/git/pdk-software")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq visible-bell t
       inhibit-startup-screen t)
 
@@ -111,18 +238,20 @@
 (add-hook 'c-mode-hook '(lambda () (c-set-style "ub")))
 (add-hook 'c++-mode-hook '(lambda () (c-set-style "ub")))
 
-(custom-set-variables
- '(help-at-pt-timer-delay 0.9)
- '(help-at-pt-display-when-idle '(flymake-overlay)))
 
-;;(add-hook 'c-mode-hook '(lambda () (flymake-mode)))
-;;(add-hook 'c++-mode-hook '(lambda () (flymake-mode)))
-(when (fboundp 'flymake-find-file-hook)
-  (add-hook 'find-file-hook 'flymake-find-file-hook))
-(global-set-key [f2] 'flymake-display-err-menu-for-current-line)
-(global-set-key [f3] 'flymake-goto-prev-error)
-(global-set-key [f4] 'flymake-goto-next-error)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; FLYMAKE
+;; (custom-set-variables
+;;  '(help-at-pt-timer-delay 0.9)
+;;  '(help-at-pt-display-when-idle '(flymake-overlay)))
+;; (when (fboundp 'flymake-find-file-hook)
+;;   (add-hook 'find-file-hook 'flymake-find-file-hook))
+;; (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
+;; (global-set-key [f3] 'flymake-goto-prev-error)
+;; (global-set-key [f4] 'flymake-goto-next-error)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; COMPILE window
 (setq compilation-scroll-output t)
 (setq compilation-auto-jump-to-first-error t)
 
