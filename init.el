@@ -92,36 +92,39 @@
 ;; See cedet/common/cedet.info for configuration details.
 ;; IMPORTANT: Tou must place this *before* any CEDET component (including
 ;; EIEIO) gets activated by another package (Gnus, auth-source, ...).
-(load-file "~/bzr/cedet/cedet-devel-load.el")
+(let ((cedet-path "~/bzr/cedet/cedet-devel-load.el"))
+  (when (file-exists-p cedet-path)
+    (load-file cedet-path)
 
-;; Add further minor-modes to be enabled by semantic-mode.
-;; See doc-string of `semantic-default-submodes' for other things
-;; you can use here.
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
-(add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
+    ;; Add further minor-modes to be enabled by semantic-mode.
+    ;; See doc-string of `semantic-default-submodes' for other things
+    ;; you can use here.
+    (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode t)
+    (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+    (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+    (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
 
-(semantic-mode t)
-(global-ede-mode t)
+    (semantic-mode t)
+    (global-ede-mode t)
 
-(require 'semantic/ia)
-;(require 'semantic/bovine/gcc)
-(require 'semantic/bovine/clang)
-(semantic-clang-activate)
-(semantic-add-system-include "/usr/local/include/boost/" 'c++-mode)
+    (require 'semantic/ia)
+					;(require 'semantic/bovine/gcc)
+    (require 'semantic/bovine/clang)
+    (semantic-clang-activate)
+    (semantic-add-system-include "/usr/local/include/boost/" 'c++-mode)
 
-(ede-cpp-root-project "pdk-software"
-                      :name "pdk software"
-                      :file "~/git/pdk-software/CMakeLists.txt"
-                      :include-path (get-header-directories "~/git/pdk-software")
-                      :system-include-path nil
-                      :spp-table '(("LINUX" . "")
-                                   ("_REENTRANT" . "")
-                                   ("MULTISESSION_TOE" . "")
-                                   ("_FORTIFY_SOURCE" . "")
-                                   ("FORCE_INLINE" . "__attribute__((always_inline)) inline")))
-
+    (ede-cpp-root-project "pdk-software"
+			  :name "pdk software"
+			  :file "~/git/pdk-software/CMakeLists.txt"
+			  :include-path (get-header-directories "~/git/pdk-software")
+			  :system-include-path nil
+			  :spp-table '(("LINUX" . "")
+				       ("_REENTRANT" . "")
+				       ("MULTISESSION_TOE" . "")
+				       ("_FORTIFY_SOURCE" . "")
+				       ("FORCE_INLINE" . "__attribute__((always_inline)) inline")))
+    )
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq visible-bell t
       inhibit-startup-screen t)
