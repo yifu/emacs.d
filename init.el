@@ -376,40 +376,40 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'package nil t)
 
-(add-to-list
- 'package-archives
- '("melpa" . "http://melpa.milkbox.net/packages/") 'append)
-(add-to-list
- 'package-archives
- '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
-(package-initialize)
+  ;; (add-to-list
+  ;;  'package-archives
+  ;;  '("melpa" . "http://melpa.milkbox.net/packages/") 'append)
+  (add-to-list
+   'package-archives
+   '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
+  (package-initialize)
 
-(defun upgrade-my-packages ()
-  (message
-   "Upgrade packages at %s."
-   (format-time-string "%H:%M-%S"))
-  (list-packages)
-  (with-current-buffer "*Packages*"
-    (package-menu-mark-upgrades)
-    (package-menu-execute t)
-    (kill-buffer))
-  (message
-   "Upgrade packages done at %s."
-   (format-time-string "%H:%M-%S")))
+  (defun upgrade-my-packages ()
+    (message
+     "Upgrade packages at %s."
+     (format-time-string "%H:%M-%S"))
+    (list-packages)
+    (with-current-buffer "*Packages*"
+      (package-menu-mark-upgrades)
+      (package-menu-execute t)
+      (kill-buffer))
+    (message
+     "Upgrade packages done at %s."
+     (format-time-string "%H:%M-%S")))
 
-(defun my-packages-too-old-p ()
-  (let ((iso-8601-time-format "%Y-%m-%dT%T%z"))
-   (defun time-to-date (time)
-         (format-time-string iso-8601-time-format time))
-   (< 7
-      (days-between
-       (time-to-date (current-time))
-       (time-to-date
-        (nth 5 (file-attributes package-user-dir)))))))
+  (defun my-packages-too-old-p ()
+    (let ((iso-8601-time-format "%Y-%m-%dT%T%z"))
+      (defun time-to-date (time)
+        (format-time-string iso-8601-time-format time))
+      (< 7
+         (days-between
+          (time-to-date (current-time))
+          (time-to-date
+           (nth 5 (file-attributes package-user-dir)))))))
 
-(add-hook 'after-init-hook
-	  (lambda ()
-	    (when (my-packages-too-old-p)
+  (add-hook 'after-init-hook
+            (lambda ()
+              (when (my-packages-too-old-p)
 		(upgrade-my-packages)))))
 
 (message "INIT.EL: PACKAGE")
