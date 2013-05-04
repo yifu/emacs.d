@@ -511,11 +511,15 @@
 	 (with-temp-buffer
 	   (insert-file-contents-literally my-packages-list-filename)
 	   (read (current-buffer)))))
+    (package-refresh-contents)
+    (message "Prepare for installing the package list: %s" my-packages)
     (dolist (p my-packages)
-      (message (symbol-name p))
-      (if (not (package-installed-p  (symbol-name p)))
-	  (package-install p)))))
-    
+      (when (not (package-installed-p p))
+        (message "Installing the package %s" (symbol-name p))
+        (package-install p))))
+      (message "Installing packages is done"))
+
+(message "MY-PACKAGES")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA ven. 19 avril 2013 17:22:43 CEST
