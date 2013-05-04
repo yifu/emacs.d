@@ -306,6 +306,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; w3m conifguration
 (setq browse-url-browser-function 'w3m-browse-url)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun irc-init ()
   (add-to-list 'rcirc-server-alist
@@ -343,6 +344,8 @@
 
 (eval-after-load 'rcirc '(irc-init))
 
+(message "INIT.EL: RCIRC")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'tramp)
 
@@ -367,6 +370,8 @@
 	      (let ((method (file-remote-p name 'method)))
 		(when (stringp method)
 		  (member method '("su" "sudo"))))))))
+
+(message "INIT.EL: TRAMP")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'package nil t)
@@ -406,9 +411,8 @@
 	  (lambda ()
 	    (when (my-packages-too-old-p)
 		(upgrade-my-packages)))))
-;; (days-between
-;;  (format-time-string "%c" (current-time))
-;;  (format-time-string "%c" (nth 5 (file-attributes "~/"))))
+
+(message "INIT.EL: PACKAGE")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'color-theme nil t)
@@ -425,6 +429,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'icicles nil t)
   (icy-mode 1))
+
+(message "INIT.EL: ICICLES")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (if (and
