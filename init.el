@@ -429,10 +429,11 @@
   (message "INIT.EL: No powerline found."))
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (require 'icicles nil t)
-  (icy-mode 1))
-
-(message "INIT.EL: ICICLES")
+;; (when (require 'icicles nil t)
+;;   (icy-mode 1))
+(require 'ido)
+(ido-mode t)
+(message "INIT.EL: ICICLES/IDO")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (if (and
