@@ -112,13 +112,14 @@
           (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
 
           (semantic-mode t)
+          (semantic-load-enable-code-helpers)
           (global-ede-mode t)
 
           (require 'semantic/ia)
-					;(require 'semantic/bovine/gcc)
-          (when (file-exists-p "/usr/bin/clang")
-            (require 'semantic/bovine/clang)
-            (semantic-clang-activate))
+          (require 'semantic/bovine/gcc)
+          ;; (when (file-exists-p "/usr/bin/clang")
+          ;;   (require 'semantic/bovine/clang)
+          ;;   (semantic-clang-activate))
           (semantic-add-system-include "/usr/local/include/boost/" 'c++-mode)
 
           (when (file-exists-p "~/git/pdk-software/CMakeLists.txt")
