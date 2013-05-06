@@ -93,7 +93,7 @@
 ;; See cedet/common/cedet.info for configuration details.
 ;; IMPORTANT: Tou must place this *before* any CEDET component (including
 ;; EIEIO) gets activated by another package (Gnus, auth-source, ...).
-(let ((cedet-path "~/bzr/cedet/cedet-devel-load.el"))
+(let ((cedet-path (expand-file-name "~/bzr/cedet/cedet-devel-load.el")))
   (if (not (file-exists-p cedet-path))
       (message "INIT.EL: No cedet found")
     (unwind-protect
@@ -122,11 +122,18 @@
           ;;   (semantic-clang-activate))
           (semantic-add-system-include "/usr/local/include/boost/" 'c++-mode)
 
-          (when (file-exists-p "~/git/pdk-software/CMakeLists.txt")
+          (when
+              (file-exists-p
+               (expand-file-name "~/git/pdk-software/CMakeLists.txt"))
             (ede-cpp-root-project "pdk-software"
                                   :name "pdk software"
-                                  :file "~/git/pdk-software/CMakeLists.txt"
-                                  :include-path (get-header-directories "~/git/pdk-software")
+                                  :file
+                                  (expand-file-name
+                                   "~/git/pdk-software/CMakeLists.txt")
+                                  :include-path
+                                  (get-header-directories
+                                   (expand-file-name
+                                    "~/git/pdk-software"))
                                   :system-include-path nil
                                   :spp-table '(("LINUX" . "")
                                                ("_REENTRANT" . "")
@@ -421,7 +428,7 @@
     (color-theme-molokai)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path "~/powerline/")
+(add-to-list 'load-path (expand-file-name "~/powerline/"))
 (if (require 'powerline nil t)
     (progn
       (if (fboundp 'powerline-default)
@@ -497,7 +504,8 @@
       (package-installed-p x)))
    (mapcar 'car package-archive-contents)))
 
-(setq my-packages-list-filename "~/.emacs.d/my-packages.list")
+(setq my-packages-list-filename
+      (expand-file-name "~/.emacs.d/my-packages.list"))
 
 (defun save-my-installed-packages ()
   (interactive)
