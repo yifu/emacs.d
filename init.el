@@ -93,54 +93,54 @@
 ;; See cedet/common/cedet.info for configuration details.
 ;; IMPORTANT: Tou must place this *before* any CEDET component (including
 ;; EIEIO) gets activated by another package (Gnus, auth-source, ...).
-(let ((cedet-path (expand-file-name "~/bzr/cedet/cedet-devel-load.el")))
-  (if (not (file-exists-p cedet-path))
-      (message "INIT.EL: No cedet found")
-    (unwind-protect
-        (progn
-          (message "Loading cedet...")
-          (unless (featurep 'cedet-devel-load)
-            (load-file cedet-path))
-          (message "Loading cedet done.")
+;; (let ((cedet-path (expand-file-name "~/bzr/cedet/cedet-devel-load.el")))
+;;   (if (not (file-exists-p cedet-path))
+;;       (message "INIT.EL: No cedet found")
+;;     (unwind-protect
+;;         (progn
+;;           (message "Loading cedet...")
+;;           (unless (featurep 'cedet-devel-load)
+;;             (load-file cedet-path))
+;;           (message "Loading cedet done.")
 
-          ;; Add further minor-modes to be enabled by semantic-mode.
-          ;; See doc-string of `semantic-default-submodes' for other things
-          ;; you can use here.
-          (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode t)
-          (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
-          (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
-          (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
+;;           ;; Add further minor-modes to be enabled by semantic-mode.
+;;           ;; See doc-string of `semantic-default-submodes' for other things
+;;           ;; you can use here.
+;;           (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode t)
+;;           (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+;;           (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+;;           (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
 
-          (semantic-mode t)
-          (semantic-load-enable-code-helpers)
-          (global-ede-mode t)
+;;           (semantic-mode t)
+;;           (semantic-load-enable-code-helpers)
+;;           (global-ede-mode t)
 
-          (require 'semantic/ia)
-          (require 'semantic/bovine/gcc)
-          ;; (when (file-exists-p "/usr/bin/clang")
-          ;;   (require 'semantic/bovine/clang)
-          ;;   (semantic-clang-activate))
-          (semantic-add-system-include "/usr/local/include/boost/" 'c++-mode)
+;;           (require 'semantic/ia)
+;;           (require 'semantic/bovine/gcc)
+;;           ;; (when (file-exists-p "/usr/bin/clang")
+;;           ;;   (require 'semantic/bovine/clang)
+;;           ;;   (semantic-clang-activate))
+;;           (semantic-add-system-include "/usr/local/include/boost/" 'c++-mode)
 
-          (when
-              (file-exists-p
-               (expand-file-name "~/git/pdk-software/CMakeLists.txt"))
-            (ede-cpp-root-project "pdk-software"
-                                  :name "pdk software"
-                                  :file
-                                  (expand-file-name
-                                   "~/git/pdk-software/CMakeLists.txt")
-                                  :include-path
-                                  (get-header-directories
-                                   (expand-file-name
-                                    "~/git/pdk-software"))
-                                  :system-include-path nil
-                                  :spp-table '(("LINUX" . "")
-                                               ("_REENTRANT" . "")
-                                               ("MULTISESSION_TOE" . "")
-                                               ("_FORTIFY_SOURCE" . "")
-                                               ("FORCE_INLINE" . "__attribute__((always_inline)) inline")))))
-      (message "Loading cedet configuration is done"))))
+;;           (when
+;;               (file-exists-p
+;;                (expand-file-name "~/git/pdk-software/CMakeLists.txt"))
+;;             (ede-cpp-root-project "pdk-software"
+;;                                   :name "pdk software"
+;;                                   :file
+;;                                   (expand-file-name
+;;                                    "~/git/pdk-software/CMakeLists.txt")
+;;                                   :include-path
+;;                                   (get-header-directories
+;;                                    (expand-file-name
+;;                                     "~/git/pdk-software"))
+;;                                   :system-include-path nil
+;;                                   :spp-table '(("LINUX" . "")
+;;                                                ("_REENTRANT" . "")
+;;                                                ("MULTISESSION_TOE" . "")
+;;                                                ("_FORTIFY_SOURCE" . "")
+;;                                                ("FORCE_INLINE" . "__attribute__((always_inline)) inline")))))
+;;       (message "Loading cedet configuration is done"))))
 
 (message "CEDET AFTER")    
 
