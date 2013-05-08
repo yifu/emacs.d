@@ -471,6 +471,30 @@
 (add-hook 'clojure-mode-hook '(lambda () (linum-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Wed May  8 18:03:32 2013
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (let (el-get-install-skip-emacswiki-recipes)
+      (goto-char (point-max))
+      (eval-print-last-sexp))))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+
+(setq el-get-user-package-directory
+      (expand-file-name "~/.emacs.d/el-get-init-files/"))
+
+;; * smartparens - for moving about and making lists and stuff
+;; * litable - for the funky eval stuff you see going on
+;; * auto-complete - for the completion stuff you see happening
+;; * hl-sexp
+;; * lexbind - for making a lexscratch buffer and for indicating the lexical status
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-x t") 'eshell)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
