@@ -591,6 +591,18 @@
         (kill-line)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Mon May 20 16:43:00 2013
+(add-to-list 'load-path
+             (expand-file-name "~/.emacs.d/vendor/"))
+(require 'cmake-mode)
+(add-to-list
+ 'auto-mode-alist
+ '("CMakeLists\\.txt\\'" . cmake-mode))
+(add-to-list
+ 'auto-mode-alist
+ '("\\.cmake\\'" . cmake-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
