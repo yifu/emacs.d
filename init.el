@@ -1,3 +1,6 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba jeu. 04 juil. 2013 14:47:58 CEST
+(server-start)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba ven. 03 mai 2013 11:58:40 CEST
@@ -63,7 +66,9 @@
 ;;(directory-files-and-attributes "~/git/pdk-software/GXALITE/config")
 
 (defun get-header-directories (root)
-  "return a list of string. Those string are path to directories containing cpp header files. The path takes the root parameter as the root for the path."
+  "return a list of string. Those string are path to directories
+containing cpp header files. The path takes the root parameter as
+the root for the path."
   (interactive "D")
   (setq header-directories '())
   ;; Check the root itself
@@ -170,6 +175,12 @@
 (windmove-default-keybindings)
 (ffap-bindings)
 
+;; yba jeu. 13 juin 2013 15:51:56 CEST
+(add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA jeu. 18 avril 2013 10:33:45 CEST
 (setq-default indent-tabs-mode nil)
@@ -261,14 +272,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
-;; (custom-set-variables
-;;  '(help-at-pt-timer-delay 0.9)
-;;  '(help-at-pt-display-when-idle '(flymake-overlay)))
-;; (when (fboundp 'flymake-find-file-hook)
-;;   (add-hook 'find-file-hook 'flymake-find-file-hook))
-;; (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
-;; (global-set-key [f3] 'flymake-goto-prev-error)
-;; (global-set-key [f4] 'flymake-goto-next-error)
+(custom-set-variables
+ '(help-at-pt-timer-delay 0.9)
+ '(help-at-pt-display-when-idle '(flymake-overlay)))
+(when (fboundp 'flymake-find-file-hook)
+  (add-hook 'find-file-hook 'flymake-find-file-hook))
+(global-set-key [f2] 'flymake-display-err-menu-for-current-line)
+(global-set-key [f3] 'flymake-goto-prev-error)
+(global-set-key [f4] 'flymake-goto-next-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COMPILE window
