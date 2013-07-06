@@ -327,43 +327,10 @@ the root for the path."
 (setq browse-url-browser-function 'w3m-browse-url)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun irc-init ()
-  (add-to-list 'rcirc-server-alist
-               '("irc.freenode.net"
-                 :channels ("#clojure" "#emacs" "#leiningen")))
-  (setq rcirc-default-user-name (setq rcirc-default-nick "keugaerg"))
-  (setq rcirc-authinfo
-        '(("freenode" nickserv "keugaerg" "lemonsin")))
-  (add-hook 'rcirc-mode-hook 'rcirc-omit-mode)
-
-  ;; This code is by Trent Buck <trentbuck@gmail.com>
-  ;; It is in the Public Domain.
-  (setq rcirc-bots
-	'("fsbot" "birny" "lisppaste" "specbot" "clojurebot")
-	rcirc-pals
-	'("nicferrier" "ivan-kanis" "technomancy" "`fogus" "Raynes"
-	  "rhickey" "cemerick" "amalloy"))
-
-  (defface rcirc-pal-nick-face
-    '((((class color) (background dark))  :foreground "PaleGreen")
-      (((class color) (background light)) :foreground "PaleGreen3"))
-    "Face used for nicks in `rcirc-pals' list.")
-  (defface rcirc-bot-nick-face
-    '((((class color) (background dark))  :foreground "tomato")
-      (((class color) (background light)) :foreground "tomato3"))
-    "Face used for nicks in `rcirc-bots' list.")
-
-  (defadvice rcirc-facify (before rcirc-facify-pals)
-    (when (eq face 'rcirc-other-nick)
-      (when (member string rcirc-pals)
-        (setq face 'rcirc-pal-nick-face))
-      (when (member string rcirc-bots)
-        (setq face 'rcirc-bot-nick-face))))
-  (ad-activate 'rcirc-facify))
-
-(eval-after-load 'rcirc '(irc-init))
-
-(message "INIT.EL: RCIRC")
+;; IRC
+(let ((irc-init-file  (expand-file-name "./irc.el")))
+  (when (file-readable-p irc-init-file)
+    (load irc-init-file)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'tramp)
