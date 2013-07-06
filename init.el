@@ -414,10 +414,14 @@ the root for the path."
           (time-to-date
            (nth 5 (file-attributes package-user-dir)))))))
 
+  (defun touch-dir (dir-name)
+    (shell-command (concat "touch " (expand-file-name dir-name))))
+
   (add-hook 'after-init-hook
             (lambda ()
               (when (my-packages-too-old-p)
-		(upgrade-my-packages)))))
+		(upgrade-my-packages))
+              (touch-dir package-user-dir))))
 
 (message "INIT.EL: PACKAGE")
 
