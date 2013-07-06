@@ -175,11 +175,32 @@ the root for the path."
 (windmove-default-keybindings)
 (ffap-bindings)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Sat Jul  6 15:15:11 2013
+(defun find-org-filenames ()
+  (let ((root-dir (expand-file-name "~/org/")))
+    (mapcar
+     (lambda (file-name) (concat root-dir file-name))
+     (remove
+      nil
+      (mapcar
+       (lambda (file-name)
+         (when (string-match ".org$" file-name)
+           file-name))
+       (directory-files root-dir))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Sat Jul  6 16:02:25 2013
+(when (file-readable-p "~/org-mode")
+ (add-to-list 'load-path (expand-file-name "~/org-mode/lisp"))
+ (add-to-list 'load-path (expand-file-name "~/org-mode/contrib/lisp")))
+
 ;; yba jeu. 13 juin 2013 15:51:56 CEST
 (add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
+(setq org-agenda-files (find-org-filenames))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA jeu. 18 avril 2013 10:33:45 CEST
