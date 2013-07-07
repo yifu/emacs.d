@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba jeu. 04 juil. 2013 14:47:58 CEST
 (server-start)
 
@@ -174,6 +174,7 @@ the root for the path."
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
 (ffap-bindings)
+(setq-default indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sat Jul  6 15:15:11 2013
@@ -204,19 +205,31 @@ the root for the path."
 (setq org-agenda-files (find-org-filenames))
 
 ;; yba Sun Jul  7 19:22:51 2013
-(require 'auto-complete-config)
-(add-to-list
- 'ac-dictionary-directories
- (expand-file-name "~/.emacs.d/elpa/auto-complete-1.4/dict/"))
-(ac-config-default)
-(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-(setq ac-quick-help-delay 0.5)
+;(require 'auto-complete-config)
+(add-hook 'after-init-hook ;eval-after-load "auto-complete"
+  (lambda ()
+    (when (require 'auto-complete-config nil :no-error)
+     (require 'find-func)
+     (add-to-list
+      'ac-dictionary-directories
+      (expand-file-name
+       (concat
+        (file-name-directory (find-library-name "auto-complete"))
+        "dict/")))
+     (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+     (setq ac-quick-help-delay 0.5)
+     (ac-config-default))))
+
+;; yba Sun Jul  7 23:43:44 2013
+;(require 'ac-slime)
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(eval-after-load "auto-complete"
+  '(progn
+     (add-to-list 'ac-modes 'slime-repl-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA jeu. 18 avril 2013 10:33:45 CEST
-(setq-default indent-tabs-mode nil)
-(add-hook 'prog-mode-hook 'linum-mode)
-
 (c-add-style "ub"
              '("bsd"
                (c-basic-offset . 4)     ; Guessed value
@@ -299,7 +312,6 @@ the root for the path."
 
 (add-hook 'c-mode-hook '(lambda () (c-set-style "ub")))
 (add-hook 'c++-mode-hook '(lambda () (c-set-style "ub")))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
@@ -437,17 +449,21 @@ the root for the path."
 (message "INIT.EL: PACKAGE")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (require 'color-theme nil t)
-  (when (fboundp 'color-theme-molokai)
-    (color-theme-molokai)))
+(add-hook 'after-init-hook
+  (lambda ()
+     (message "INIT.EL AFTER LOADING COLOR THEME")
+     (if (require 'color-theme-molokai nil :no-error)
+         (progn
+           (message "TRIGGER color-theme molokai")
+           (color-theme-initialize)
+           (color-theme-molokai))
+       (message "Color theme molokai not found"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "~/powerline/"))
-(if (require 'powerline nil t)
-    (progn
-      (if (fboundp 'powerline-default)
-          (powerline-default)))
-  (message "INIT.EL: No powerline found."))
+(eval-after-load 'powerline
+  '(if (fboundp 'powerline-default)
+      (powerline-default)))
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (when (require 'icicles nil t)
@@ -457,18 +473,14 @@ the root for the path."
 (message "INIT.EL: ICICLES/IDO")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (and
-       (load (expand-file-name "~/quicklisp/slime-helper.el") t)
-       (require 'slime nil t))
-    (progn
-      (add-hook 'lisp-mode-hook
-                (lambda () (slime-mode t)))
-      (add-hook 'inferior-lisp-mode-hook
-                (lambda () (inferior-slime-mode t)))
-      (setq slime-net-coding-system 'utf-8-unix)
-      (slime-setup '(slime-fancy))
-      (setq inferior-lisp-program "clisp"))
-  (message "INIT.EL: No slime helper found."))
+(load (expand-file-name "~/quicklisp/slime-helper.el") t)
+(add-hook 'lisp-mode-hook
+          (lambda () (slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook
+          (lambda () (inferior-slime-mode t)))
+(setq slime-net-coding-system 'utf-8-unix)
+(setq inferior-lisp-program "clisp")
+(eval-after-load 'slime '(slime-setup '(slime-fancy)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (autoload
@@ -611,7 +623,7 @@ the root for the path."
 ;; yba Mon May 20 16:43:00 2013
 (add-to-list 'load-path
              (expand-file-name "~/.emacs.d/vendor/"))
-(require 'cmake-mode)
+;(require 'cmake-mode)
 (add-to-list
  'auto-mode-alist
  '("CMakeLists\\.txt\\'" . cmake-mode))
@@ -619,6 +631,7 @@ the root for the path."
  'auto-mode-alist
  '("\\.cmake\\'" . cmake-mode))
 
+(message "INIT.EL CMAKE mode")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (custom-set-variables
