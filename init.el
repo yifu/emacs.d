@@ -210,6 +210,7 @@ the root for the path."
  (expand-file-name "~/.emacs.d/elpa/auto-complete-1.4/dict/"))
 (ac-config-default)
 (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+(setq ac-quick-help-delay 0.5)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA jeu. 18 avril 2013 10:33:45 CEST
@@ -570,6 +571,9 @@ the root for the path."
         (message "Installing the package %s" (symbol-name p))
         (package-install p))))
       (message "Installing packages is done"))
+
+(defadvice package-menu-execute (after save-package-list activate)
+  (save-my-installed-packages))
 
 (message "MY-PACKAGES")
 
