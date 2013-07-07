@@ -197,10 +197,19 @@ the root for the path."
 
 ;; yba jeu. 13 juin 2013 15:51:56 CEST
 (add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
+(add-hook 'org-mode-hook (lambda () (set-input-method 'latin-1-prefix)))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-agenda-files (find-org-filenames))
+
+;; yba Sun Jul  7 19:22:51 2013
+(require 'auto-complete-config)
+(add-to-list
+ 'ac-dictionary-directories
+ (expand-file-name "~/.emacs.d/elpa/auto-complete-1.4/dict/"))
+(ac-config-default)
+(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA jeu. 18 avril 2013 10:33:45 CEST
@@ -345,7 +354,8 @@ the root for the path."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; w3m conifguration
-(setq browse-url-browser-function 'w3m-browse-url)
+;(setq browse-url-browser-function 'w3m-browse-url)
+(setq browse-url-browser-function 'browse-url-default-browser)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
@@ -389,7 +399,7 @@ the root for the path."
   (add-to-list
    'package-archives
    '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
-  (package-initialize)
+;  (package-initialize)
 
   (defun upgrade-my-packages ()
     (message
