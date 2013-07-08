@@ -229,6 +229,14 @@ the root for the path."
      (add-to-list 'ac-modes 'slime-repl-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba lun. 08 juil. 2013 11:43:29 CEST
+(global-set-key
+ (kbd "<f5>")
+ (lambda ()
+   (interactive)
+   (revert-buffer :ignore-auto :noconfirm)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA jeu. 18 avril 2013 10:33:45 CEST
 (c-add-style "ub"
              '("bsd"
