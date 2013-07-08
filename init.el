@@ -420,7 +420,11 @@ the root for the path."
   (add-to-list
    'package-archives
    '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
-;  (package-initialize)
+
+  ;; yba lun. 08 juil. 2013 13:21:17 BST 
+  ;; Calling 'package-initialize is necessary for being able to call
+  ;; any 'package-* functions.
+  (package-initialize)
 
   (defun upgrade-my-packages ()
     (message
@@ -460,12 +464,15 @@ the root for the path."
 (add-hook 'after-init-hook
   (lambda ()
      (message "INIT.EL AFTER LOADING COLOR THEME")
-     (if (require 'color-theme-molokai nil :no-error)
-         (progn
-           (message "TRIGGER color-theme molokai")
-           (color-theme-initialize)
-           (color-theme-molokai))
-       (message "Color theme molokai not found"))))
+     (if (require 'color-theme nil :no-error)
+	 (if (require 'color-theme-molokai nil :no-error)
+	     (progn
+	       (message "TRIGGER color-theme molokai")
+	       (when (fboundp 'color-theme-initialize)
+		 (color-theme-initialize))
+	       (color-theme-molokai))
+	   (message "Color theme molokai not found"))
+       (message "Color theme package not found"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "~/powerline/"))
