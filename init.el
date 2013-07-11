@@ -532,6 +532,12 @@ the root for the path."
 (global-set-key (kbd "C-x t") 'eshell)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba jeu. 11 juil. 2013 11:29:30 CEST
+;; As suggested by Steve Yegge in "effective Emacs":
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun yba-insert-date ()
   "Insert date time at point."
   (interactive)
