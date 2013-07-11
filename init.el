@@ -198,7 +198,10 @@ the root for the path."
 
 ;; yba jeu. 13 juin 2013 15:51:56 CEST
 (add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
-(add-hook 'org-mode-hook (lambda () (set-input-method 'latin-1-prefix)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (unless (getenv "AT_WORK")
+                (set-input-method 'latin-1-prefix))))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
