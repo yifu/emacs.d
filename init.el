@@ -467,7 +467,7 @@ the optional argument: force-reverting to true."
            (nth 5 (file-attributes package-user-dir)))))))
 
   (defun touch-dir (dir-name)
-    (shell-command (concat "touch " (expand-file-name dir-name))))
+    (set-file-times (expand-file-name dir-name)))
 
   (add-hook 'after-init-hook
             (lambda ()
