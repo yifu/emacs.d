@@ -241,10 +241,10 @@ file and not requesting for confirmation. When the current buffer
 is modified, the command refuse to revert it, unless you specify
 the optional argument: force-reverting to true."
    (interactive "P")
-   (when (or (buffer-modified-p) (not force-reverting))
-;     (debug)
-     (error "The buffer has been modified"))
-   (revert-buffer :ignore-auto :noconfirm)))
+;   (message "force-reverting value is %s" force-reverting)
+   (if (or force-reverting (not (buffer-modified-p)))
+       (revert-buffer :ignore-auto :noconfirm)
+     (error "The buffer has been modified"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba ven. 12 juil. 2013 14:32:59 CEST
