@@ -235,8 +235,15 @@ the root for the path."
 ;; yba lun. 08 juil. 2013 11:43:29 CEST
 (global-set-key
  (kbd "<f5>")
- (lambda ()
-   (interactive)
+ (lambda (&optional force-reverting)
+   "Interactive call to revert-buffer. Ignoring the auto-save
+file and not requesting for confirmation. When the current buffer
+is modified, the command refuse to revert it, unless you specify
+the optional argument: force-reverting to true."
+   (interactive "P")
+   (when (or (buffer-modified-p) (not force-reverting))
+;     (debug)
+     (error "The buffer has been modified"))
    (revert-buffer :ignore-auto :noconfirm)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
