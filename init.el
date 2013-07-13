@@ -506,9 +506,11 @@ the optional argument: force-reverting to true."
           (lambda () (slime-mode t)))
 (add-hook 'inferior-lisp-mode-hook
           (lambda () (inferior-slime-mode t)))
-(setq slime-net-coding-system 'utf-8-unix)
-(setq inferior-lisp-program "clisp")
-(eval-after-load 'slime '(slime-setup '(slime-fancy)))
+(eval-after-load 'slime
+  '(progn
+     (setq slime-net-coding-system 'utf-8-unix)
+     (setq inferior-lisp-program "clisp")
+     (slime-setup '(slime-fancy))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (autoload
