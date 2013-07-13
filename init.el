@@ -6,9 +6,9 @@
 ;; yba ven. 03 mai 2013 11:58:40 CEST
 (defun directory-p (attr)
   (let ((file-type (car attr)))
-   (and
-    (not (stringp file-type))
-    (car attr))))
+    (and
+     (not (stringp file-type))
+     (car attr))))
 
 ;; (defun yba-some (list)
 ;;   (defun yba-some-aux (acc list)
@@ -54,10 +54,10 @@
     (lambda (file)
       (let ((file-name (car file))
             (file-attr (cdr file)))
-       (when (and
-              (directory-p file-attr)
-              (not (hidden-file-p file-name)))
-         (concat dir "/" file-name))))
+        (when (and
+               (directory-p file-attr)
+               (not (hidden-file-p file-name)))
+          (concat dir "/" file-name))))
     (directory-files-and-attributes dir))))
 ;; (car "toto")
 ;; (list-dir-of-child "~/git/pdk-software")
@@ -189,38 +189,38 @@ the root for the path."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sat Jul  6 16:02:25 2013
 (when (file-readable-p "~/org-mode")
- (add-to-list 'load-path (expand-file-name "~/org-mode/lisp"))
- (add-to-list 'load-path (expand-file-name "~/org-mode/contrib/lisp")))
+  (add-to-list 'load-path (expand-file-name "~/org-mode/lisp"))
+  (add-to-list 'load-path (expand-file-name "~/org-mode/contrib/lisp")))
 
 ;; yba jeu. 13 juin 2013 15:51:56 CEST
 (add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
 (add-hook 'org-mode-hook
           (lambda ()
             (unless (getenv "AT_WORK")
-                (set-input-method 'latin-1-prefix))))
+              (set-input-method 'latin-1-prefix))))
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-agenda-files (find-org-filenames))
 
 ;; yba Sun Jul  7 19:22:51 2013
-;(require 'auto-complete-config)
+;;(require 'auto-complete-config)
 (add-hook 'after-init-hook ;eval-after-load "auto-complete"
-  (lambda ()
-    (when (require 'auto-complete-config nil :no-error)
-     (require 'find-func)
-     (add-to-list
-      'ac-dictionary-directories
-      (expand-file-name
-       (concat
-        (file-name-directory (find-library-name "auto-complete"))
-        "dict/")))
-     (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-     (setq ac-quick-help-delay 0.5)
-     (ac-config-default))))
+          (lambda ()
+            (when (require 'auto-complete-config nil :no-error)
+              (require 'find-func)
+              (add-to-list
+               'ac-dictionary-directories
+               (expand-file-name
+                (concat
+                 (file-name-directory (find-library-name "auto-complete"))
+                 "dict/")))
+              (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+              (setq ac-quick-help-delay 0.5)
+              (ac-config-default))))
 
 ;; yba Sun Jul  7 23:43:44 2013
-;(require 'ac-slime)
+;;(require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
 (eval-after-load "auto-complete"
@@ -234,10 +234,10 @@ the root for the path."
  (lambda (&optional force-reverting)
    "Interactive call to revert-buffer. Ignoring the auto-save
 file and not requesting for confirmation. When the current buffer
-is modified, the command refuse to revert it, unless you specify
+is modified, the command refuses to revert it, unless you specify
 the optional argument: force-reverting to true."
    (interactive "P")
-;   (message "force-reverting value is %s" force-reverting)
+   ;;(message "force-reverting value is %s" force-reverting)
    (if (or force-reverting (not (buffer-modified-p)))
        (revert-buffer :ignore-auto :noconfirm)
      (error "The buffer has been modified"))))
@@ -246,8 +246,8 @@ the optional argument: force-reverting to true."
 ;; yba ven. 12 juil. 2013 14:32:59 CEST
 (require 'uniquify)
 (setq
-  uniquify-buffer-name-style 'post-forward
-  uniquify-separator ":")
+ uniquify-buffer-name-style 'post-forward
+ uniquify-separator ":")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA jeu. 18 avril 2013 10:33:45 CEST
@@ -370,25 +370,25 @@ the optional argument: force-reverting to true."
 
 (when (eq system-type 'darwin);(string-match "apple" url-os-type)
   (set-language-environment 'utf-8)
-;;  (set-terminal-coding-system 'utf-8)
-;; (set-keyboard-coding-system 'utf-8-emacs)
-;; (prefer-coding-system 'utf-8)
-;; mac-function-modifier
-;; mac-control-modifier
-;; mac-command-modifier
-;; mac-option-modifier
-;; mac-right-command-modifier
-;; mac-right-control-modifier
-;; mac-right-option-modifier
+  ;;  (set-terminal-coding-system 'utf-8)
+  ;; (set-keyboard-coding-system 'utf-8-emacs)
+  ;; (prefer-coding-system 'utf-8)
+  ;; mac-function-modifier
+  ;; mac-control-modifier
+  ;; mac-command-modifier
+  ;; mac-option-modifier
+  ;; mac-right-command-modifier
+  ;; mac-right-control-modifier
+  ;; mac-right-option-modifier
 
-;;  (setq mac-command-modifier 'super)
-;;  (setq mac-control-modifier 'control)
+  ;;  (setq mac-command-modifier 'super)
+  ;;  (setq mac-control-modifier 'control)
   (setq ns-function-modifier (quote hyper)
 	ns-right-alternate-modifier (quote super)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; w3m conifguration
-;(setq browse-url-browser-function 'w3m-browse-url)
+;;(setq browse-url-browser-function 'w3m-browse-url)
 (setq browse-url-browser-function 'browse-url-default-browser)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -475,17 +475,17 @@ the optional argument: force-reverting to true."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'after-init-hook
-  (lambda ()
-     (message "INIT.EL AFTER LOADING COLOR THEME")
-     (if (require 'color-theme nil :no-error)
-	 (if (require 'color-theme-molokai nil :no-error)
-	     (progn
-	       (message "TRIGGER color-theme molokai")
-	       (when (fboundp 'color-theme-initialize)
-		 (color-theme-initialize))
-	       (color-theme-molokai))
-	   (message "Color theme molokai not found"))
-       (message "Color theme package not found"))))
+          (lambda ()
+            (message "INIT.EL AFTER LOADING COLOR THEME")
+            (if (require 'color-theme nil :no-error)
+                (if (require 'color-theme-monokai nil :no-error)
+                    (progn
+                      (message "TRIGGER color-theme monokai")
+                      (when (fboundp 'color-theme-initialize)
+                        (color-theme-initialize))
+                      (color-theme-monokai))
+                  (message "Color theme monokai not found"))
+              (message "Color theme package not found"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "~/powerline/"))
@@ -616,7 +616,7 @@ the optional argument: force-reverting to true."
       (when (not (package-installed-p p))
         (message "Installing the package %s" (symbol-name p))
         (package-install p))))
-      (message "Installing packages is done"))
+  (message "Installing packages is done"))
 
 (defadvice package-menu-execute (after save-package-list activate)
   (save-my-installed-packages))
@@ -657,7 +657,7 @@ the optional argument: force-reverting to true."
 ;; yba Mon May 20 16:43:00 2013
 (add-to-list 'load-path
              (expand-file-name "~/.emacs.d/vendor/"))
-;(require 'cmake-mode)
+;;(require 'cmake-mode)
 (add-to-list
  'auto-mode-alist
  '("CMakeLists\\.txt\\'" . cmake-mode))
