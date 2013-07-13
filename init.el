@@ -169,7 +169,11 @@ the root for the path."
 (blink-cursor-mode -1)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
-(ffap-bindings)
+;; yba Sam 13 jul 14:11:52 2013
+;;
+;; ffap does rebind C-x C-f to 'find-file-at-point which goes in the
+;;way when initializing ido-mode. Ido expect 'find-file to be bound
+;;C-x C-f before rebinding it to 'ido-find-file.  (ffap-bindings)
 (setq-default indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -498,6 +502,15 @@ the optional argument: force-reverting to true."
 ;;   (icy-mode 1))
 (require 'ido)
 (ido-mode t)
+(setq ido-use-filename-at-point 'guess)
+;;(ido-everywhere t)
+
+;; yba Sat Jul 13 13:47:10 2013
+;;
+;; At that moment the Ido version shipped with Emacs does not remap
+;; 'find-file-at-point to 'ido-find-file. Which is because of ffap-bindings.
+;; (setq ido-use-filename-at-point 'guess)
+;; (global-set-key (kbd "C-x C-f") 'ido-find-file)
 (message "INIT.EL: ICICLES/IDO")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
