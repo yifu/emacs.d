@@ -495,8 +495,9 @@ the optional argument: force-reverting to true."
 (add-to-list 'load-path (expand-file-name "~/powerline/"))
 (eval-after-load 'powerline
   '(if (fboundp 'powerline-default)
-      (powerline-default)))
-  
+       (powerline-default)))
+(require 'powerline)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (when (require 'icicles nil t)
 ;;   (icy-mode 1))
