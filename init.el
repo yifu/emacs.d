@@ -549,7 +549,7 @@ the optional argument: force-reverting to true."
 ;; * lexbind - for making a lexscratch buffer and for indicating the lexical status
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(global-set-key (kbd "C-x t") 'eshell)
+(global-set-key (kbd "C-c t") 'eshell)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba jeu. 11 juil. 2013 11:29:30 CEST
