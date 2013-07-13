@@ -550,6 +550,28 @@ the optional argument: force-reverting to true."
 (add-hook 'lisp-mode-hook 'yba-enable-hl-sexp-mode)
 (add-hook 'emacs-lisp-mode-hook 'yba-enable-hl-sexp-mode)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Sat Jul 13 16:20:01 2013
+(defun nullify-var-at-point ()
+  "Handy interactive method which help in reseting some values
+when playing with dynamic elisp code, since it turns out that
+most of time it variables are finishing messed up. Usually
+followed by 'eval-buffer invoking."
+  (interactive)
+  (set (variable-at-point) nil))
+
+(defun eval-var-at-point ()
+  "Evaluate the value of the variable at point."
+  (interactive)
+  (message "EVAL-VARIABLE-AT-POINT")
+  (message "Value is %s" (eval (variable-at-point))))
+
+(global-set-key (kbd "C-c r") 'nullify-var-at-point)
+(global-set-key (kbd "C-c v") 'eval-var-at-point)
+;;(setq test 3)
+;;(setq toto 42)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Wed May  8 18:03:32 2013
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
 
