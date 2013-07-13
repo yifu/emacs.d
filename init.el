@@ -164,7 +164,7 @@ the root for the path."
 
 (column-number-mode 1)
 (global-hl-line-mode 1)
-
+(make-variable-buffer-local 'global-hl-line-mode)
 (show-paren-mode 1)
 (blink-cursor-mode -1)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -541,6 +541,15 @@ the optional argument: force-reverting to true."
 (add-hook 'clojure-mode-hook '(lambda () (linum-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Sat Jul 13 16:00:59 2013
+(defun yba-enable-hl-sexp-mode ()
+  (message "YBA-ENABLE-HL-SEXP-MODE")
+  (setq global-hl-line-mode nil)
+  (hl-sexp-mode))
+
+(add-hook 'lisp-mode-hook 'yba-enable-hl-sexp-mode)
+(add-hook 'emacs-lisp-mode-hook 'yba-enable-hl-sexp-mode)
+
 ;; yba Wed May  8 18:03:32 2013
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
 
