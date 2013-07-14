@@ -595,10 +595,34 @@ followed by 'eval-buffer invoking."
 
 (add-to-list 'el-get-recipe-path
  (expand-file-name "~/.emacs.d/el-get-user/recipes"))
-(el-get 'sync)
 
 (setq el-get-user-package-directory
       (expand-file-name "~/.emacs.d/el-get-init-files/"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Mon Jul 15 01:07:50 2013
+;;
+;; el-get helper functions
+(setq my-el-get-installed-packages-filename
+      (expand-file-name "~/.emacs.d/my-el-get-installed-packages"))
+
+(defun save-my-el-get-packages-list ()
+  (interactive)
+  (with-temp-buffer
+    (insert
+     (with-output-to-string
+       (prin1 (el-get-list-package-names-with-status "installed"))))
+    (write-file my-el-get-installed-packages-filename)))
+
+(defun load-my-el-get-package-list ()
+  (with-temp-buffer
+    (insert-file-contents my-el-get-installed-packages-filename)
+    (read (current-buffer))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Finally, load the packages
+(el-get-self-update)
+(el-get 'sync (load-my-el-get-package-list))
 
 ;; * smartparens - for moving about and making lists and stuff
 ;; * litable - for the funky eval stuff you see going on
