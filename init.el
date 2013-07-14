@@ -194,10 +194,12 @@ the root for the path."
 ;; yba Sat Jul  6 16:02:25 2013
 (when (file-readable-p "~/org-mode")
   (add-to-list 'load-path (expand-file-name "~/org-mode/lisp"))
-  (add-to-list 'load-path (expand-file-name "~/org-mode/contrib/lisp")))
+  (add-to-list 'load-path
+               (expand-file-name "~/org-mode/contrib/lisp")))
 
 ;; yba jeu. 13 juin 2013 15:51:56 CEST
-(add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
+;; Not needed when global-font-lock-mode is on
+(add-hook 'org-mode-hook 'turn-on-font-lock)
 (add-hook 'org-mode-hook
           (lambda ()
             (unless (getenv "AT_WORK")
@@ -217,7 +219,8 @@ the root for the path."
                'ac-dictionary-directories
                (expand-file-name
                 (concat
-                 (file-name-directory (find-library-name "auto-complete"))
+                 (file-name-directory
+                  (find-library-name "auto-complete"))
                  "dict/")))
               (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
               (setq ac-quick-help-delay 0.5)
@@ -322,7 +325,9 @@ the optional argument: force-reverting to true."
                 (namespace-close . 0)
                 (namespace-open . 0)
                 (objc-method-args-cont . c-lineup-ObjC-method-args)
-                (objc-method-call-cont c-lineup-ObjC-method-call-colons c-lineup-ObjC-method-call +)
+                (objc-method-call-cont
+                 c-lineup-ObjC-method-call-colons
+                 c-lineup-ObjC-method-call +)
                 (objc-method-intro .
                                    [0])
                 (statement-case-open . 0)
@@ -509,7 +514,9 @@ the optional argument: force-reverting to true."
 ;; yba Sat Jul 13 13:47:10 2013
 ;;
 ;; At that moment the Ido version shipped with Emacs does not remap
-;; 'find-file-at-point to 'ido-find-file. Which is because of ffap-bindings.
+;; 'find-file-at-point to 'ido-find-file. Which is because of
+;; ffap-bindings.
+;;
 ;; (setq ido-use-filename-at-point 'guess)
 ;; (global-set-key (kbd "C-x C-f") 'ido-find-file)
 (message "INIT.EL: ICICLES/IDO")
@@ -577,13 +584,17 @@ followed by 'eval-buffer invoking."
 
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+      (let ((url
+             (concat
+              "https://raw.github.com/"
+              "dimitri/el-get/master/el-get-install.el")))
+        (url-retrieve-synchronously url))
     (let (el-get-install-skip-emacswiki-recipes)
       (goto-char (point-max))
       (eval-print-last-sexp))))
 
-(add-to-list 'el-get-recipe-path (expand-file-name "~/.emacs.d/el-get-user/recipes"))
+(add-to-list 'el-get-recipe-path
+ (expand-file-name "~/.emacs.d/el-get-user/recipes"))
 (el-get 'sync)
 
 (setq el-get-user-package-directory
@@ -658,7 +669,8 @@ followed by 'eval-buffer invoking."
 	   (insert-file-contents-literally my-packages-list-filename)
 	   (read (current-buffer)))))
     (package-refresh-contents)
-    (message "Prepare for installing the package list: %s" my-packages)
+    (message
+     "Prepare for installing the package list: %s" my-packages)
     (dolist (p my-packages)
       (when (not (package-installed-p p))
         (message "Installing the package %s" (symbol-name p))
