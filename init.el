@@ -434,6 +434,23 @@ the optional argument: force-reverting to true."
 (message "INIT.EL: TRAMP")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba Mon Jul 15 22:53:17 2013
+;;
+;; Helper for packages upgrade.
+(defun my-packages-too-old-p (package-user-dir)
+  (let ((iso-8601-time-format "%Y-%m-%dT%T%z"))
+    (defun time-to-date (time)
+      (format-time-string iso-8601-time-format time))
+    (< 7
+       (days-between
+        (time-to-date (current-time))
+        (time-to-date
+         (nth 5 (file-attributes package-user-dir)))))))
+
+(defun touch-dir (dir-name)
+  (set-file-times (expand-file-name dir-name)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'package nil t)
 
   ;; (add-to-list
@@ -461,22 +478,9 @@ the optional argument: force-reverting to true."
      "Upgrade packages done at %s."
      (format-time-string "%H:%M-%S")))
 
-  (defun my-packages-too-old-p ()
-    (let ((iso-8601-time-format "%Y-%m-%dT%T%z"))
-      (defun time-to-date (time)
-        (format-time-string iso-8601-time-format time))
-      (< 7
-         (days-between
-          (time-to-date (current-time))
-          (time-to-date
-           (nth 5 (file-attributes package-user-dir)))))))
-
-  (defun touch-dir (dir-name)
-    (set-file-times (expand-file-name dir-name)))
-
   (add-hook 'after-init-hook
             (lambda ()
-              (when (my-packages-too-old-p)
+              (when (my-packages-too-old-p package-user-dir)
 		(upgrade-my-packages))
               (touch-dir package-user-dir))))
 
@@ -621,8 +625,15 @@ followed by 'eval-buffer invoking."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Finally, load the packages
-(el-get-self-update)
-(el-get 'sync (load-my-el-get-package-list))
+(let ((el-get-dir (expand-file-name "~/.emacs.d/el-get/")))
+  (when (or
+         (not (file-exists-p el-get-dir))
+         (my-packages-too-old-p el-get-dir))
+   (message "INIT.EL: Upgrading el-get packages.")
+   (el-get-self-update)
+   (el-get 'sync (load-my-el-get-package-list))
+   (touch-dir el-get-dir)
+   (message "INIT.EL: Upgrading el-get packages done.")))
 
 ;; * smartparens - for moving about and making lists and stuff
 ;; * litable - for the funky eval stuff you see going on
