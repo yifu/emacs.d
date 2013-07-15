@@ -623,6 +623,9 @@ followed by 'eval-buffer invoking."
     (insert-file-contents my-el-get-installed-packages-filename)
     (read (current-buffer))))
 
+(defadvice el-get-package-menu-execute (after save-el-get-packages-list activate)
+  (save-my-el-get-packages-list))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Finally, load the packages
 (let ((el-get-dir (expand-file-name "~/.emacs.d/el-get/")))
