@@ -1,4 +1,4 @@
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba jeu. 04 juil. 2013 14:47:58 CEST
 (server-start)
 
@@ -346,10 +346,14 @@ the optional argument: force-reverting to true."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
 (custom-set-variables
- '(help-at-pt-timer-delay 0.9)
- '(help-at-pt-display-when-idle '(flymake-overlay)))
-(when (fboundp 'flymake-find-file-hook)
-  (add-hook 'find-file-hook 'flymake-find-file-hook))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
+ '(help-at-pt-timer-delay 0.9))
+;; (when (fboundp 'flymake-find-file-hook)
+;;   (add-hook 'find-file-hook 'flymake-find-file-hook))
 (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
 (global-set-key [f3] 'flymake-goto-prev-error)
 (global-set-key [f4] 'flymake-goto-next-error)
@@ -765,15 +769,10 @@ followed by 'eval-buffer invoking."
 (message "INIT.EL CMAKE mode")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
