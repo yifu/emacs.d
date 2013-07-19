@@ -342,6 +342,7 @@ the optional argument: force-reverting to true."
 
 (add-hook 'c-mode-hook '(lambda () (c-set-style "ub")))
 (add-hook 'c++-mode-hook '(lambda () (c-set-style "ub")))
+(add-hook 'c++-mode-hook (lambda () (global-set-key (kbd "C-c c") 'compile)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
@@ -655,7 +656,9 @@ followed by 'eval-buffer invoking."
 ;; yba jeu. 11 juil. 2013 11:29:30 CEST
 ;; As suggested by Steve Yegge in "effective Emacs":
 (global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command)
+;; yba mar. 16 juil. 2013 11:58:24 CEST
+;; C-c C-m shallows the ebrowse commands.
+;;(global-set-key "\C-c\C-m" 'execute-extended-command)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun yba-insert-date ()
