@@ -634,14 +634,18 @@ followed by 'eval-buffer invoking."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Finally, load the packages
 (let ((el-get-dir (expand-file-name "~/.emacs.d/el-get/")))
-  (when (or
-         (not (file-exists-p el-get-dir))
-         (my-packages-too-old-p el-get-dir))
-   (message "INIT.EL: Upgrading el-get packages.")
-   (el-get-self-update)
-   (el-get 'sync (load-my-el-get-package-list))
-   (touch-dir el-get-dir)
-   (message "INIT.EL: Upgrading el-get packages done.")))
+  (if (or
+       (not (file-exists-p el-get-dir))
+       (my-packages-too-old-p el-get-dir))
+      (progn
+        (message "INIT.EL: Upgrading el-get packages.")
+        (el-get-self-update)
+        (el-get 'sync (load-my-el-get-package-list))
+        (touch-dir el-get-dir)
+        (message "INIT.EL: Upgrading el-get packages done."))
+    (progn
+      (message "INIT.EL: Syncing el-get.")
+      (el-get 'sync))))
 
 ;; * smartparens - for moving about and making lists and stuff
 ;; * litable - for the funky eval stuff you see going on
