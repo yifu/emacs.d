@@ -554,6 +554,8 @@ the optional argument: force-reverting to true."
 (add-hook 'lisp-mode-hook '(lambda () (enable-paredit-mode)))
 
 (add-hook 'prog-mode-hook '(lambda () (linum-mode)))
+(add-hook 'prog-mode-hook
+          (lambda () (setq show-trailing-whitespace t)))
 (add-hook 'clojure-mode-hook '(lambda () (linum-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
