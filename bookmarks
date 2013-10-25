@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("(tramp) Auto-save and Backup"
+(("org-capture-last-stored"
+ (filename . "~/org/notes.org")
+ (front-context-string . "** TODO TEST tha")
+ (rear-context-string . "orBase.cpp::{]]\n")
+ (position . 7224))
+("(tramp) Auto-save and Backup"
  (front-context-string . "\n   On some vers")
  (rear-context-string . "rary directory.\n")
  (position . 71291)
