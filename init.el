@@ -1,3 +1,4 @@
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba jeu. 04 juil. 2013 14:47:58 CEST
 (server-start)
@@ -151,7 +152,8 @@ the root for the path."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq visible-bell t
-      inhibit-startup-screen t)
+      inhibit-startup-screen t
+      set-mark-command-repeat-pop t)
 
 (put 'scroll-left 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
@@ -281,7 +283,7 @@ the optional argument: force-reverting to true."
                 (statement . 0)             ; Guessed value
                 (statement-block-intro . +) ; Guessed value
                 (statement-case-intro . +)  ; Guessed value
-                (substatement . +)      ; Guessed value
+                (substatement . 0)      ; Guessed value
                 (substatement-open . 0) ; Guessed value
                 (topmost-intro . 0)     ; Guessed value
                 (access-label . -)
@@ -360,7 +362,11 @@ the optional argument: force-reverting to true."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
- '(help-at-pt-timer-delay 0.9))
+ '(help-at-pt-timer-delay 0.9)
+ '(minimap-dedicated-window t)
+ '(sml/hidden-modes (quote (" hl-p" "GitGutter" "ElDoc")))
+ '(sml/name-width 60)
+ '(sml/show-client t))
 ;; (when (fboundp 'flymake-find-file-hook)
 ;;   (add-hook 'find-file-hook 'flymake-find-file-hook))
 (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
@@ -473,7 +479,7 @@ the optional argument: force-reverting to true."
    'package-archives
    '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
 
-  ;; yba lun. 08 juil. 2013 13:21:17 BST 
+  ;; yba lun. 08 juil. 2013 13:21:17 BST
   ;; Calling 'package-initialize is necessary for being able to call
   ;; any 'package-* functions.
   (package-initialize)
@@ -514,11 +520,11 @@ the optional argument: force-reverting to true."
               (message "Color theme package not found"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path (expand-file-name "~/powerline/"))
-(eval-after-load 'powerline
-  '(if (fboundp 'powerline-default)
-       (powerline-default)))
-(require 'powerline)
+;; (add-to-list 'load-path (expand-file-name "~/powerline/"))
+;; (eval-after-load 'powerline
+;;   '(if (fboundp 'powerline-default)
+;;        (powerline-default)))
+;; (require 'powerline)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (when (require 'icicles nil t)
@@ -526,6 +532,7 @@ the optional argument: force-reverting to true."
 (require 'ido)
 (ido-mode t)
 (setq ido-use-filename-at-point 'guess)
+(setq ido-auto-merge-work-directories-length 0)
 ;;(ido-everywhere t)
 
 ;; yba Sat Jul 13 13:47:10 2013
@@ -571,10 +578,20 @@ the optional argument: force-reverting to true."
 (defun yba-enable-hl-sexp-mode ()
   (message "YBA-ENABLE-HL-SEXP-MODE")
   (setq global-hl-line-mode nil)
-  (hl-sexp-mode))
+  (when (fboundp 'hl-sexp-mode)
+    (hl-sexp-mode)))
 
 (add-hook 'lisp-mode-hook 'yba-enable-hl-sexp-mode)
 (add-hook 'emacs-lisp-mode-hook 'yba-enable-hl-sexp-mode)
+
+;; yba ven. 20 sept. 2013 12:42:10 CEST
+(add-hook 'lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+
+;; yba ven. 25 oct. 2013 10:54:57 CEST
+(require 'rainbow-delimiters)
+(add-hook 'lisp-mode-hook 'rainbow-delimiters)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sat Jul 13 16:20:01 2013
@@ -798,9 +815,7 @@ followed by 'eval-buffer invoking."
 (setq elmo-imap4-default-authenticate-type 'clear)
 (setq elmo-imap4-default-port '993)
 (setq elmo-imap4-default-stream-type 'ssl)
-
 (setq elmo-imap4-use-modified-utf7 t)
-
 ;; SMTP
 (setq wl-smtp-connection-type 'ssl)
 (setq wl-smtp-posting-port 465)
@@ -828,6 +843,111 @@ followed by 'eval-buffer invoking."
       'wl-draft-send
       'wl-draft-kill
       'mail-send-hook))
+
+;; yba mar. 20 août 2013 15:42:34 CEST
+(add-to-list
+ 'auto-mode-alist
+ '("\\.in\\'" . python-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba ven. 16 août 2013 18:53:44 CEST
+;; IMPORTANT RESCUE MODE FOR MAGIT
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/magit-1.2.0"))
+;; (require 'magit)
+(global-set-key (kbd "C-c g") 'magit-status)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba lun. 26 août 2013 10:40:00 CEST
+(add-to-list
+    'org-mode-hook
+    (lambda ()
+      (setq org-default-notes-file (concat org-directory "/notes.org"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba mer. 04 sept. 2013 14:36:21 CEST
+(defun yba-kill-buffers-regexp (regexp)
+  "Kill buffers related to a file, whose filename match against the regexp."
+  (interactive "sRegexp? ")
+  (let ((count-killed-buffers
+         (length (mapcar
+                  #'kill-buffer
+                  (remove-if-not
+                   (lambda (x)
+                     (and
+                      (buffer-file-name x)
+                      (string-match regexp (buffer-file-name x))))
+                   (buffer-list))))))
+    (if (zerop count-killed-buffers)
+        (message "No buffer matches. ")
+      (message "A result of %i buffers has been killed. " count-killed-buffers))))
+
+;; yba mer. 18 sept. 2013 15:30:27 CEST
+(defun yba-list-workplaces ()
+  "List of currently open workplaces in the ~/git/ directory or on a remote machine accessed via /ssh:.../."
+  (interactive)
+  (remove-duplicates
+   (remove
+    nil
+    (mapcar
+     (lambda (file-name)
+       (when (string-match "/\\(git/\\|ssh:\\)\\([^/:]+\\)" file-name)
+         (match-string-no-properties 2 file-name)))
+     (remove
+      nil
+      (mapcar #'buffer-file-name (buffer-list)))))
+   :test #'string-equal))
+
+(defun yba-kill-buffers ()
+  "Kill buffers related to a file, whose filename match against the regexp."
+  (interactive)
+  (let ((workplace-name (ido-completing-read "Workplace? " (yba-list-workplaces))))
+    (when workplace-name
+      (let ((count-killed-buffers
+             (length (mapcar
+                      #'kill-buffer
+                      (remove-if-not
+                       (lambda (x)
+                         (and
+                          (buffer-file-name x)
+                          (string-match workplace-name (buffer-file-name x))))
+                       (buffer-list))))))
+        (if (zerop count-killed-buffers)
+            (message "No buffer matches. ")
+          (message "A result of %i buffers has been killed. " count-killed-buffers))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba ven. 25 oct. 2013 10:07:24 CEST
+(defun add-elts-to-list (list-var &rest elt-list)
+  (dolist (elt elt-list list-var)
+    (add-to-list list-var elt)))
+
+(when (window-system)
+  (require 'git-gutter-fringe))
+(global-git-gutter-mode +1)
+(setq-default indicate-buffer-boundaries 'right)
+(setq-default indicate-empty-lines +1)
+
+(require 'smart-mode-line)
+(if after-init-time
+    (sml/setup)
+  (add-hook 'after-init-hook 'sml/setup))
+(add-elts-to-list
+ 'sml/replacer-regexp-list
+ '("^~/.emacs.d/" ":ED:")
+ '("^~/git/master/" ":MASTER:")
+ '("^:PDK/GXAL:/src/modules/\\([^/]*\\)" ":PDK/GXAL/\\1:")
+ '("^:PDK:GXALITE" ":PDK/GXAL:")
+ '("^~/git/pdk-software/" ":PDK:"))
+
+(setq redisplay-dont-pause t
+      scroll-margin 1
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1)
+(setq mouse-wheel-follow-mouse 't)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+
+(setq kill-ring-max 1000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-faces

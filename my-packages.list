@@ -1,1 +1,2 @@
-(apt-utils clojure-mode ac-nrepl nrepl auto-complete fuzzy color-theme color-theme-monokai popup color-theme-molokai hl-sexp ac-slime magit paredit)
+(auto-complete fuzzy ac-slime clojure-mode ac-nrepl nrepl color-theme color-theme-monokai browse-kill-ring hl-sexp ac-slime magit paredit)
+
