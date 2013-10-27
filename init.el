@@ -356,17 +356,6 @@ the optional argument: force-reverting to true."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
- '(help-at-pt-timer-delay 0.9)
- '(minimap-dedicated-window t)
- '(sml/hidden-modes (quote (" hl-p" "GitGutter" "ElDoc")))
- '(sml/name-width 60)
- '(sml/show-client t))
 ;; (when (fboundp 'flymake-find-file-hook)
 ;;   (add-hook 'find-file-hook 'flymake-find-file-hook))
 (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
@@ -589,9 +578,10 @@ the optional argument: force-reverting to true."
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
 ;; yba ven. 25 oct. 2013 10:54:57 CEST
-(require 'rainbow-delimiters)
-(add-hook 'lisp-mode-hook 'rainbow-delimiters)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters)
+;; (add-hook 'after-init-hook
+;;           (when (require 'rainbow-delimiters nil t)
+;;             (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+;;             (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sat Jul 13 16:20:01 2013
@@ -956,4 +946,14 @@ followed by 'eval-buffer invoking."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
 ;; '(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
- )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
+ '(help-at-pt-timer-delay 0.9)
+ '(minimap-dedicated-window t)
+ '(sml/hidden-modes (quote (" hl-p" " GitGutter" " ElDoc")))
+ '(sml/name-width 60)
+ '(sml/show-client t)) )

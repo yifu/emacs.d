@@ -1,2 +1,1 @@
-(auto-complete fuzzy ac-slime clojure-mode ac-nrepl nrepl color-theme color-theme-monokai browse-kill-ring hl-sexp ac-slime magit paredit)
-
+(ac-slime fringe-helper apt-utils git-gutter-fringe git-gutter clojure-mode ac-nrepl nrepl smart-mode-line auto-complete fuzzy color-theme color-theme-monokai popup color-theme-molokai hl-sexp rainbow-delimiters browse-kill-ring magit paredit rainbow-mode)
