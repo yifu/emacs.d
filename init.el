@@ -218,12 +218,15 @@ the root for the path."
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-agenda-files (find-org-filenames))
-(add-to-list
+(add-hook
     'org-mode-hook
     (lambda ()
       (setq org-default-notes-file (concat org-directory "/notes.org"))))
+(add-hook
+ 'org-mode-hook
+ (lambda () (define-key org-mode-map (kbd "C-c t") 'org-todo)))
+
 ;;(setq org-todo-keywords '((type "DISCARD" "TODO" "DONE")))
-(define-key org-mode-map (kbd "C-c t") 'org-todo)
 
 ;; yba Sun Jul  7 19:22:51 2013
 ;;(require 'auto-complete-config)
