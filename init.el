@@ -218,6 +218,12 @@ the root for the path."
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-agenda-files (find-org-filenames))
+(add-to-list
+    'org-mode-hook
+    (lambda ()
+      (setq org-default-notes-file (concat org-directory "/notes.org"))))
+;;(setq org-todo-keywords '((type "DISCARD" "TODO" "DONE")))
+(define-key org-mode-map (kbd "C-c t") 'org-todo)
 
 ;; yba Sun Jul  7 19:22:51 2013
 ;;(require 'auto-complete-config)
@@ -344,15 +350,25 @@ the optional argument: force-reverting to true."
                 (statement-cont . +)
                 (stream-op . c-lineup-streamop)
                 (string . -1000)
-                (substatement-label . 0)
+                (substatement-label . +)
                 (template-args-cont c-lineup-template-args +)
                 (topmost-intro-cont . c-lineup-topmost-intro-cont))))
 
-(setq c-echo-syntactic-information-p t)
-
-(add-hook 'c-mode-hook '(lambda () (c-set-style "ub")))
-(add-hook 'c++-mode-hook '(lambda () (c-set-style "ub")))
-(add-hook 'c++-mode-hook (lambda () (global-set-key (kbd "C-c c") 'compile)))
+(setq c-echo-syntactic-information-p nil)
+(defun remap-ret-key ()
+  (define-key c-mode-base-map "\C-m" 'c-context-line-break))
+(add-hook 'c-initialization-hook 'remap-ret-key)
+(add-hook 'c++-mode-hook (lambda () (c-set-style "ub")))
+(add-hook 'c++-mode-hook 'c-toggle-auto-hungry-state)
+(add-hook 'c++-mode-hook 'subword-mode)
+(add-hook 'c++-mode-hook 'hs-minor-mode)
+(defface yba/boolean-keywords-face '((t (:foreground "red" :background "cyan" :weight bold)))
+  "Face for boolean keyword in c++.")
+(font-lock-add-keywords
+ 'c++-mode
+ '(("\\<\\(and\\|or\\|not\\)\\>" . 'yba/boolean-keywords-face)))
+(global-set-key (kbd "C-c c") 'compile)
+(setq hs-isearch-open t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
@@ -847,13 +863,6 @@ followed by 'eval-buffer invoking."
 (global-set-key (kbd "C-c g") 'magit-status)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; yba lun. 26 août 2013 10:40:00 CEST
-(add-to-list
-    'org-mode-hook
-    (lambda ()
-      (setq org-default-notes-file (concat org-directory "/notes.org"))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mer. 04 sept. 2013 14:36:21 CEST
 (defun yba-kill-buffers-regexp (regexp)
   "Kill buffers related to a file, whose filename match against the regexp."
@@ -945,7 +954,7 @@ followed by 'eval-buffer invoking."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-;; '(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -957,3 +966,4 @@ followed by 'eval-buffer invoking."
  '(sml/hidden-modes (quote (" hl-p" " GitGutter" " ElDoc")))
  '(sml/name-width 60)
  '(sml/show-client t)) )
+
