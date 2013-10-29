@@ -362,9 +362,11 @@ the optional argument: force-reverting to true."
   (define-key c-mode-base-map "\C-m" 'c-context-line-break))
 (add-hook 'c-initialization-hook 'remap-ret-key)
 (add-hook 'c++-mode-hook (lambda () (c-set-style "ub")))
-(add-hook 'c++-mode-hook 'c-toggle-auto-hungry-state)
-(add-hook 'c++-mode-hook 'subword-mode)
-(add-hook 'c++-mode-hook 'hs-minor-mode)
+(add-hook 'c++-mode-hook (lambda () (c-toggle-electric-state 1)))
+(add-hook 'c++-mode-hook (lambda () (c-toggle-auto-newline 1)))
+(add-hook 'c++-mode-hook (lambda () (c-toggle-hungry-state 1)))
+(add-hook 'c++-mode-hook (lambda () (subword-mode 1)))
+(add-hook 'c++-mode-hook (lambda () (hs-minor-mode 1)))
 (defface yba/boolean-keywords-face '((t (:foreground "red" :background "cyan" :weight bold)))
   "Face for boolean keyword in c++.")
 (font-lock-add-keywords
@@ -801,7 +803,7 @@ followed by 'eval-buffer invoking."
 ;; yba Mon May 20 16:43:00 2013
 (add-to-list 'load-path
              (expand-file-name "~/.emacs.d/vendor/"))
-;;(require 'cmake-mode)
+(require 'cmake-mode)
 (add-to-list
  'auto-mode-alist
  '("CMakeLists\\.txt\\'" . cmake-mode))
