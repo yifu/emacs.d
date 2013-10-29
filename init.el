@@ -292,7 +292,7 @@ the optional argument: force-reverting to true."
                 (statement . 0)             ; Guessed value
                 (statement-block-intro . +) ; Guessed value
                 (statement-case-intro . +)  ; Guessed value
-                (substatement . 0)      ; Guessed value
+                (substatement . +)      ; Guessed value
                 (substatement-open . 0) ; Guessed value
                 (topmost-intro . 0)     ; Guessed value
                 (access-label . -)
