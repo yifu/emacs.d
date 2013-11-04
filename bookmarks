@@ -4,9 +4,9 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
  (filename . "~/org/notes.org")
- (front-context-string . "** TODO TEST tha")
- (rear-context-string . "orBase.cpp::{]]\n")
- (position . 7224))
+ (front-context-string . "** TODO Voir com")
+ (rear-context-string . "/cmi2class.el]]\n")
+ (position . 9035))
 ("(tramp) Auto-save and Backup"
  (front-context-string . "\n   On some vers")
  (rear-context-string . "rary directory.\n")

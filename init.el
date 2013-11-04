@@ -480,6 +480,58 @@ the optional argument: force-reverting to true."
   (set-file-times (expand-file-name dir-name)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun upgrade-my-packages ()
+  (message
+   "Upgrade packages at %s."
+   (format-time-string "%H:%M-%S"))
+  (list-packages)
+  (with-current-buffer "*Packages*"
+    (package-menu-mark-upgrades)
+    (package-menu-execute t)
+    (kill-buffer))
+  (message
+   "Upgrade packages done at %s."
+   (format-time-string "%H:%M-%S")))
+
+(defun list-my-installed-packages ()
+  (remove-if-not
+   (lambda (x)
+     (and	;(not (memq x jpk-packages))
+      (not (package-built-in-p x))
+      (package-installed-p x)))
+   (mapcar 'car package-archive-contents)))
+
+(setq my-packages-list-filename
+      (expand-file-name "~/.emacs.d/my-packages.list"))
+
+(defun save-my-installed-packages ()
+  (interactive)
+  (with-temp-buffer
+    (insert
+     (with-output-to-string
+       (prin1 (list-my-installed-packages))))
+    (write-file my-packages-list-filename)))
+
+(defun load-my-packages-list ()
+  (interactive)
+  (let ((my-packages
+	 (with-temp-buffer
+	   (insert-file-contents-literally my-packages-list-filename)
+	   (read (current-buffer)))))
+    (package-refresh-contents)
+    (message
+     "Prepare for installing the package list: %s" my-packages)
+    (dolist (p my-packages)
+      (when (not (package-installed-p p))
+        (message "Installing the package %s" (symbol-name p))
+        (package-install p))))
+  (message "Installing packages is done"))
+
+(defadvice package-menu-execute (after save-package-list activate)
+  (save-my-installed-packages))
+
+(message "MY-PACKAGES")
+
 (when (require 'package nil t)
 
   ;; (add-to-list
@@ -493,20 +545,7 @@ the optional argument: force-reverting to true."
   ;; Calling 'package-initialize is necessary for being able to call
   ;; any 'package-* functions.
   (package-initialize)
-
-  (defun upgrade-my-packages ()
-    (message
-     "Upgrade packages at %s."
-     (format-time-string "%H:%M-%S"))
-    (list-packages)
-    (with-current-buffer "*Packages*"
-      (package-menu-mark-upgrades)
-      (package-menu-execute t)
-      (kill-buffer))
-    (message
-     "Upgrade packages done at %s."
-     (format-time-string "%H:%M-%S")))
-
+  (load-my-packages-list)
   (add-hook 'after-init-hook
             (lambda ()
               (when (my-packages-too-old-p package-user-dir)
@@ -729,47 +768,6 @@ followed by 'eval-buffer invoking."
 				  )))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Mon Apr 15 23:16:45 2013
-(defun list-my-installed-packages ()
-  (remove-if-not
-   (lambda (x)
-     (and	;(not (memq x jpk-packages))
-      (not (package-built-in-p x))
-      (package-installed-p x)))
-   (mapcar 'car package-archive-contents)))
-
-(setq my-packages-list-filename
-      (expand-file-name "~/.emacs.d/my-packages.list"))
-
-(defun save-my-installed-packages ()
-  (interactive)
-  (with-temp-buffer
-    (insert
-     (with-output-to-string
-       (prin1 (list-my-installed-packages))))
-    (write-file my-packages-list-filename)))
-
-(defun load-my-packages-list ()
-  (interactive)
-  (let ((my-packages
-	 (with-temp-buffer
-	   (insert-file-contents-literally my-packages-list-filename)
-	   (read (current-buffer)))))
-    (package-refresh-contents)
-    (message
-     "Prepare for installing the package list: %s" my-packages)
-    (dolist (p my-packages)
-      (when (not (package-installed-p p))
-        (message "Installing the package %s" (symbol-name p))
-        (package-install p))))
-  (message "Installing packages is done"))
-
-(defadvice package-menu-execute (after save-package-list activate)
-  (save-my-installed-packages))
-
-(message "MY-PACKAGES")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YBA ven. 19 avril 2013 17:22:43 CEST
 (setq counter 0)
 (defun inc-channels-indices ()
@@ -963,16 +961,17 @@ followed by 'eval-buffer invoking."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(confirm-kill-emacs (quote yes-or-no-p))
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
  '(help-at-pt-timer-delay 0.9)
  '(minimap-dedicated-window t)
  '(sml/hidden-modes (quote (" hl-p" " GitGutter" " ElDoc")))
  '(sml/name-width 60)
- '(sml/show-client t)) )
-
+ '(sml/show-client t))
