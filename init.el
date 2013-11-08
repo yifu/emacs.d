@@ -282,13 +282,13 @@ the optional argument: force-reverting to true."
                (c-basic-offset . 4)     ; Guessed value
                (c-offsets-alist
                 (block-close . 0)       ; Guessed value
-                (case-label . 0)        ; Guessed value
+                (case-label . +)        ; Guessed value
                 (catch-clause . 0)      ; Guessed value
                 (defun-block-intro . +) ; Guessed value
                 (defun-close . 0)       ; Guessed value
                 (defun-open . 0)        ; Guessed value
                 (else-clause . 0)       ; Guessed value
-                (member-init-intro . 0) ; Guessed value
+                (member-init-intro . *) ; Guessed value
                 (statement . 0)             ; Guessed value
                 (statement-block-intro . +) ; Guessed value
                 (statement-case-intro . +)  ; Guessed value
@@ -322,7 +322,7 @@ the optional argument: force-reverting to true."
                 (extern-lang-open . 0)
                 (friend . 0)
                 (func-decl-cont . +)
-                (inclass . +)
+                (inclass . ++)
                 (incomposition . +)
                 (inexpr-class . 0)
                 (inexpr-statement . +)
@@ -374,11 +374,29 @@ the optional argument: force-reverting to true."
  '(("\\<\\(and\\|or\\|not\\)\\>" . 'yba/boolean-keywords-face)))
 (global-set-key (kbd "C-c c") 'compile)
 (setq hs-isearch-open t)
+(add-to-list 'auto-mode-alist '("GXALITE.*\\.h\\'" . c++-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
 ;; (when (fboundp 'flymake-find-file-hook)
 ;;   (add-hook 'find-file-hook 'flymake-find-file-hook))
+
+;; (defun yba/flymake-find-buildfile (filename dir)
+;;   "/home/ybaumes/git/pdk-software/build/debug/")
+;; (fset 'flymake-find-buildfile 'yba/flymake-find-buildfile)
+
+;; (setq flymake-allowed-file-name-masks
+;;       (cons '("\\.\\(?:c\\(?:pp\\|xx\\|\\+\\+\\)?\\|CC\\)\\'"
+;;               yba/flymake-make-init
+;;               flymake-simple-cleanup
+;;               flymake-get-real-file-name)
+;;             flymake-allowed-file-name-masks))
+
+;; (defun yba/flymake-make-init ()
+;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                      'flymake-create-temp-inplace)))
+;;     (list "make" (list "-j10" "-s" "-C" "/home/ybaumes/git/pdk-software/build/debug/"))))
+
 (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
 (global-set-key [f3] 'flymake-goto-prev-error)
 (global-set-key [f4] 'flymake-goto-next-error)
@@ -960,12 +978,14 @@ followed by 'eval-buffer invoking."
 (setq trash-directory (expand-file-name "~/trash/"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-)
+(when (eq 'gnu/linux system-type)
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+   ))
 
  ;'(default ((t (:inherit nil :stipple nil :background "#272822" :foreground "#F8F8F2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 129 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
 (custom-set-variables
