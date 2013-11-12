@@ -978,6 +978,23 @@ followed by 'eval-buffer invoking."
 (setq trash-directory (expand-file-name "~/trash/"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba mar. 12 nov. 2013 12:12:44 CET
+(defun telnet-tcp-at-pt ()
+  "When inside a gxalite configuration file, place the point over a tcp coordinate in order to telnet it."
+  (interactive)
+  (telnet
+   (let ((things (thing-at-point 'filename t)))
+     (message "MSG %s" things)
+     (string-match "tcp/\\([^:]*\\):\\([0-9]*\\)" things)
+     (let ((host (match-string 1 things))
+           (port (match-string 2 things)))
+       (message "%s %s " host port)))))
+(defun define-telnet-key ()
+  (define-key nxml-mode-map "\C-c f" 'telnet-tcp-at-pt))
+(add-hook 'nxml-mode-hook 'define-telnet-key)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (eq 'gnu/linux system-type)
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
