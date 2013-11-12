@@ -326,7 +326,7 @@ the optional argument: force-reverting to true."
                 (incomposition . +)
                 (inexpr-class . 0)
                 (inexpr-statement . +)
-                (inextern-lang . +)
+                (inextern-lang . 0)
                 (inher-cont . c-lineup-multi-inher)
                 (inher-intro . +)
                 (inlambda . c-lineup-inexpr-block)
