@@ -753,8 +753,6 @@ followed by 'eval-buffer invoking."
 
 ;; * smartparens - for moving about and making lists and stuff
 ;; * litable - for the funky eval stuff you see going on
-;; * auto-complete - for the completion stuff you see happening
-;; * hl-sexp
 ;; * lexbind - for making a lexscratch buffer and for indicating the lexical status
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1005,6 +1003,10 @@ followed by 'eval-buffer invoking."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba ven. 22 nov. 2013 10:38:39 CET
 (global-set-key (kbd "C-z") (lambda () (interactive) (message "Do nothing.")))
+
+(require 'yasnippet)
+(yas-global-mode 1)
+;;(setq ac-source-yasnippet nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (eq 'gnu/linux system-type)

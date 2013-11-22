@@ -1,1 +1,1 @@
-(ac-slime fringe-helper apt-utils git-gutter-fringe git-gutter clojure-mode iedit elpy virtualenv ac-nrepl nrepl smart-mode-line idomenu auto-complete fuzzy color-theme color-theme-monokai popup color-theme-molokai hl-sexp highlight-indentation nose rainbow-delimiters find-file-in-project browse-kill-ring magit paredit yasnippet rainbow-mode)
+(ac-slime clojure-mode elpy color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized ac-nrepl nrepl color-theme color-theme-solarized paredit)
