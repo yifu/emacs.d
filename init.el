@@ -375,13 +375,16 @@ the optional argument: force-reverting to true."
 (add-hook 'c++-mode-hook (lambda () (subword-mode 1)))
 (add-hook 'c++-mode-hook (lambda () (hs-minor-mode 1)))
 (defface yba/boolean-keywords-face '((t (:foreground "red" :background "cyan" :weight bold)))
-  "Face for boolean keyword in c++.")
+  "Face for boolean keyword in c.")
+(font-lock-add-keywords
+ 'c-mode
+ '(("\\<\\(and\\|or\\|not\\)\\>" . 'yba/boolean-keywords-face)))
 (font-lock-add-keywords
  'c++-mode
  '(("\\<\\(and\\|or\\|not\\)\\>" . 'yba/boolean-keywords-face)))
 (global-set-key (kbd "C-c c") 'compile)
 (setq hs-isearch-open t)
-(add-to-list 'auto-mode-alist '("GXALITE.*\\.h\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("pdk-software.*\\.h\\'" . c++-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
