@@ -1003,6 +1003,9 @@ followed by 'eval-buffer invoking."
   (define-key nxml-mode-map "\C-c f" 'telnet-tcp-at-pt))
 (add-hook 'nxml-mode-hook 'define-telnet-key)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba ven. 22 nov. 2013 10:38:39 CET
+(global-set-key (kbd "C-z") (lambda () (interactive) (message "Do nothing.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (eq 'gnu/linux system-type)
