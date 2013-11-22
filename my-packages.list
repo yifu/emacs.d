@@ -1,1 +1,1 @@
-(ac-slime clojure-mode elpy color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized ac-nrepl nrepl color-theme color-theme-solarized paredit)
+(ac-slime clojure-mode elpy color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized ac-nrepl nrepl color-theme color-theme-solarized paredit yasnippet)

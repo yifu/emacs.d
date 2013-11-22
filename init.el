@@ -978,6 +978,7 @@ followed by 'eval-buffer invoking."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sun Nov  3 13:52:35 2013
+(require 'elpy)
 (elpy-enable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1005,6 +1006,7 @@ followed by 'eval-buffer invoking."
 (global-set-key (kbd "C-z") (lambda () (interactive) (message "Do nothing.")))
 
 (require 'yasnippet)
+;;(require 'auto-complete-yasnippet)
 (yas-global-mode 1)
 ;;(setq ac-source-yasnippet nil)
 
