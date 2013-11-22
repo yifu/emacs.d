@@ -720,7 +720,7 @@ followed by 'eval-buffer invoking."
 (setq my-el-get-installed-packages-filename
       (expand-file-name "~/.emacs.d/my-el-get-installed-packages"))
 
-(defun save-my-el-get-packages-list ()
+(defun save-my-el-get-packages-list (package)
   (interactive)
   (with-temp-buffer
     (insert
@@ -733,8 +733,7 @@ followed by 'eval-buffer invoking."
     (insert-file-contents my-el-get-installed-packages-filename)
     (read (current-buffer))))
 
-(defadvice el-get-package-menu-execute (after save-el-get-packages-list activate)
-  (save-my-el-get-packages-list))
+(add-hook 'el-get-post-init-hooks 'save-my-el-get-packages-list)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Finally, load the packages
