@@ -742,14 +742,17 @@ followed by 'eval-buffer invoking."
        (not (file-exists-p el-get-dir))
        (my-packages-too-old-p el-get-dir))
       (progn
-        (message "INIT.EL: Upgrading el-get packages.")
-        (el-get-self-update)
-        (el-get 'sync (load-my-el-get-package-list))
-        (touch-dir el-get-dir)
-        (message "INIT.EL: Upgrading el-get packages done."))
+        (add-hook
+         'after-init-hook
+         (lambda ()
+           (message "INIT.EL: Upgrading el-get packages.")
+           (el-get-self-update)
+           (el-get 'sync (load-my-el-get-package-list))
+           (touch-dir el-get-dir)
+           (message "INIT.EL: Upgrading el-get packages done."))))
     (progn
       (message "INIT.EL: Syncing el-get.")
-      (el-get 'sync))))
+      (add-hook 'after-init-hook (lambda () (el-get 'sync))))))
 
 ;; * smartparens - for moving about and making lists and stuff
 ;; * litable - for the funky eval stuff you see going on
@@ -965,6 +968,7 @@ followed by 'eval-buffer invoking."
  '("^:PDK/GXAL:/src/modules/\\([^/]*\\)" ":PDK/GXAL/\\1:")
  '("^:PDK:GXALITE" ":PDK/GXAL:")
  '("^~/git/pdk-software/" ":PDK:"))
+(setq sml/mode-width 'full)
 
 (setq redisplay-dont-pause t
       scroll-margin 1
@@ -1031,5 +1035,4 @@ followed by 'eval-buffer invoking."
  '(help-at-pt-timer-delay 0.9)
  '(minimap-dedicated-window t)
  '(sml/hidden-modes (quote (" hl-p" " GitGutter" " ElDoc")))
- '(sml/name-width 60)
  '(sml/show-client t))
