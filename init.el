@@ -168,7 +168,7 @@ the root for the path."
 (global-hl-line-mode 1)
 (make-variable-buffer-local 'global-hl-line-mode)
 (show-paren-mode 1)
-(blink-cursor-mode -1)
+(blink-cursor-mode 1)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
 ;; yba Sam 13 jul 14:11:52 2013
@@ -1013,6 +1013,11 @@ followed by 'eval-buffer invoking."
 ;;(require 'auto-complete-yasnippet)
 (yas-global-mode 1)
 ;;(setq ac-source-yasnippet nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba lun. 16 déc. 2013 16:39:34 CET
+(global-set-key (kbd "<f11>") 'magit-status)
+(global-set-key (kbd "<f12>") 'compile)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (eq 'gnu/linux system-type)
