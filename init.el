@@ -1020,6 +1020,13 @@ followed by 'eval-buffer invoking."
 (global-set-key (kbd "<f12>") 'compile)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba mar. 17 déc. 2013 11:45:34 CET
+(defun make-gmac-orderid-from-softedf (orderid symbolindex)
+  (logior
+   (lsh symbolindex 32)
+   (logand (lsh orderid (- (+ 8 8 16))) #xFFFFFFFF)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (eq 'gnu/linux system-type)
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
