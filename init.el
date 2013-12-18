@@ -1026,6 +1026,16 @@ followed by 'eval-buffer invoking."
    (lsh symbolindex 32)
    (logand (lsh orderid (- (+ 8 8 16))) #xFFFFFFFF)))
 
+(defun make-softedf-id-from (gmac-order-id marketid systemid gtcindicator)
+  ;;( gmac-order-id marketid systemid gtcindicator)
+  (logior
+   (lsh gmac-order-id (+ 8 8 16))
+   (lsh marketid (+ 8 8))
+   (lsh systemid (+ 8))
+   (lsh gtcindicator (+ 0))))
+
+;;(make-softedf-id-from 68990059846881 3 21 0 )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (eq 'gnu/linux system-type)
   (custom-set-faces
