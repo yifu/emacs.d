@@ -1026,10 +1026,13 @@ followed by 'eval-buffer invoking."
    (lsh symbolindex 32)
    (logand (lsh orderid (- (+ 8 8 16))) #xFFFFFFFF)))
 
+(defun extract-exch-order-id-from-gmac-orderid (gmac-order-id)
+  (logand gmac-order-id  #xFFFFFFFF))
+
 (defun make-softedf-id-from (gmac-order-id marketid systemid gtcindicator)
   ;;( gmac-order-id marketid systemid gtcindicator)
   (logior
-   (lsh gmac-order-id (+ 8 8 16))
+   (lsh (extract-exch-order-id-from-gmac-orderid gmac-order-id) (+ 8 8 16))
    (lsh marketid (+ 8 8))
    (lsh systemid (+ 8))
    (lsh gtcindicator (+ 0))))
