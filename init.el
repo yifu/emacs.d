@@ -11,14 +11,14 @@
      (not (stringp file-type))
      (car attr))))
 
-;; (defun yba-some (list)
-;;   (defun yba-some-aux (acc list)
+;; (defun yba/some (list)
+;;   (defun yba/some-aux (acc list)
 ;;     (if list
 ;;         (yba-some-aux (or acc (car list)) (cdr list))
 ;;         acc))
 ;;   (yba-some-aux nil list))
 
-(defun yba-some (list) (not (null (member t list))))
+(defun yba/some (list) (not (null (member t list))))
 ;;(member t '( nil nil nil))
 ;;(yba-some '(nil t nil))
 ;;(yba-some '(nil nil nil))
@@ -660,7 +660,7 @@ the optional argument: force-reverting to true."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sat Jul 13 16:00:59 2013
-(defun yba-enable-hl-sexp-mode ()
+(defun yba/enable-hl-sexp-mode ()
   (message "YBA-ENABLE-HL-SEXP-MODE")
   (setq global-hl-line-mode nil)
   (when (fboundp 'hl-sexp-mode)
@@ -778,7 +778,7 @@ followed by 'eval-buffer invoking."
 ;;(global-set-key "\C-c\C-m" 'execute-extended-command)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun yba-insert-date ()
+(defun yba/insert-date ()
   "Insert date time at point."
   (interactive)
   (insert (format-time-string "%c" (current-time))))
@@ -903,7 +903,7 @@ followed by 'eval-buffer invoking."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mer. 04 sept. 2013 14:36:21 CEST
-(defun yba-kill-buffers-regexp (regexp)
+(defun yba/kill-buffers-regexp (regexp)
   "Kill buffers related to a file, whose filename match against the regexp."
   (interactive "sRegexp? ")
   (let ((count-killed-buffers
@@ -920,7 +920,7 @@ followed by 'eval-buffer invoking."
       (message "A result of %i buffers has been killed. " count-killed-buffers))))
 
 ;; yba mer. 18 sept. 2013 15:30:27 CEST
-(defun yba-list-workplaces ()
+(defun yba/list-workplaces ()
   "List of currently open workplaces in the ~/git/ directory or on a remote machine accessed via /ssh:.../."
   (interactive)
   (remove-duplicates
@@ -935,7 +935,7 @@ followed by 'eval-buffer invoking."
       (mapcar #'buffer-file-name (buffer-list)))))
    :test #'string-equal))
 
-(defun yba-kill-buffers ()
+(defun yba/kill-buffers ()
   "Kill buffers related to a file, whose filename match against the regexp."
   (interactive)
   (let ((workplace-name (ido-completing-read "Workplace? " (yba-list-workplaces))))
