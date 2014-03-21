@@ -255,6 +255,9 @@ the root for the path."
   '(progn
      (add-to-list 'ac-modes 'slime-repl-mode)))
 
+(load (expand-file-name "~/github/stumpwm/contrib/stumpwm-mode.el"))
+(setq stumpwm-shell-program (expand-file-name "~/github/stumpwm/contrib/stumpish"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba lun. 08 juil. 2013 11:43:29 CEST
 (global-set-key
@@ -297,7 +300,7 @@ the optional argument: force-reverting to true."
                 (substatement . +)      ; Guessed value
                 (substatement-open . 0) ; Guessed value
                 (topmost-intro . 0)     ; Guessed value
-                (access-label . -)
+                (access-label . 0)
                 (annotation-top-cont . 0)
                 (annotation-var-cont . +)
                 (arglist-close . c-lineup-close-paren)
@@ -359,7 +362,7 @@ the optional argument: force-reverting to true."
                 (template-args-cont c-lineup-template-args +)
                 (topmost-intro-cont . c-lineup-topmost-intro-cont))))
 
-(setq c-echo-syntactic-information-p nil)
+(setq c-echo-syntactic-information-p t)
 (defun remap-ret-key ()
   (define-key c-mode-base-map "\C-m" 'c-context-line-break))
 (add-hook 'c-initialization-hook 'remap-ret-key)
@@ -1068,7 +1071,7 @@ followed by 'eval-buffer invoking."
       (re-search-forward "struct \\([a-z_]+\\)")
       (let ((struct-name (match-string 1)))
         (princ
-         (format "\nvoid diff_%s(%s *l, %s *r)\n{\n    ostringstream oss;\n" struct-name struct-name struct-name)))
+         (format "\nstatic bool diff_%s(%s *l, %s *r)\n{\n    ostringstream oss;\n" struct-name struct-name struct-name)))
       (while (re-search-forward "^ +\\([a-z0-9_]+\\) +\\([a-z_]+\\)\\(\\[\\([0-9]+\\)\\]\\)?;" end :noerror)
         (let ((type (match-string 1))
               (name (match-string 2))
@@ -1077,14 +1080,20 @@ followed by 'eval-buffer invoking."
                 (ntoh-end (type-to-ntoh-end type)))
             (princ
              (if size
-                 (format "    if (memcmp(l->%s, r->%s, %s) == 0)\n        oss << \"msg %s differs [\" << string(l->%s, %s) << \"][\" << string(r->%s, %s) << \"] \";\n"
+                 (format "    if (memcmp(l->%s, r->%s, %s) != 0)\n        oss << \"msg %s differs [\" << string(l->%s, %s) << \"][\" << string(r->%s, %s) << \"] \";\n"
                          name name size name name size name size)
                (format "    if (l->%s != r->%s)\n        oss << \"msg %s differs [\" << %sl->%s%s << \"][\" << %sr->%s%s << \"] \";\n"
                        name name name ntoh name ntoh-end ntoh name ntoh-end))))))
       (princ
-       (format "    oss << \"for msgs [\" << key2str(getMsgKey((char*)l)) << \"][\" << key2str(getMsgKey((char*)r)) << \"]\";\n"))
+       (format "    if (not oss.str().empty())\n    {\n"))
       (princ
-       (format "    if (not oss.str().empty())\n        cout << oss.str() << endl;\n}\n\n"))
+       (format "        oss << \"for msgs [\" << key2str(getMsgKey((char*)l)) << \"][\" << key2str(getMsgKey((char*)r)) << \"]\";\n"))
+      (princ
+       (format "        cout << oss.str() << endl;\n    }\n"))
+      (princ
+       (format "    else {\n        return false;\n    }\n"))
+      (princ
+       (format "    return true;\n}\n"))
       (save-excursion
         (re-search-forward "// INSERT HERE")
         (forward-line -1)
@@ -1121,6 +1130,13 @@ followed by 'eval-buffer invoking."
     (let ((prefix (match-string 1)))
       (when (not (string= prefix "mbp"))
         (replace-match "\\1_mbo_arca")))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yba mar. 28 janv. 2014 16:53:30 CET
+(defun yba/replace ()
+  (interactive)
+  (while (re-search-forward "\"\\([a-z.]+\\)\"" nil :noerror)
+    (replace-match "[\"\\1\", 0]")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mer. 08 janv. 2014 11:34:08 CET
@@ -1346,3 +1362,4 @@ followed by 'eval-buffer invoking."
  '(sml/hidden-modes (quote (" hl-p" " GitGutter" " ElDoc")))
  '(sml/show-client t))
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
