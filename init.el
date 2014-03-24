@@ -14,16 +14,16 @@
 ;; (defun yba/some (list)
 ;;   (defun yba/some-aux (acc list)
 ;;     (if list
-;;         (yba-some-aux (or acc (car list)) (cdr list))
+;;         (yba/some-aux (or acc (car list)) (cdr list))
 ;;         acc))
-;;   (yba-some-aux nil list))
+;;   (yba/some-aux nil list))
 
 (defun yba/some (list) (not (null (member t list))))
 ;;(member t '( nil nil nil))
-;;(yba-some '(nil t nil))
-;;(yba-some '(nil nil nil))
-;;(yba-some nil)
-;;(yba-some '(t))
+;;(yba/some '(nil t nil))
+;;(yba/some '(nil nil nil))
+;;(yba/some nil)
+;;(yba/some '(t))
 
 (defun hidden-file-p (file-name)
   (string= "." (substring file-name 0 1)))
@@ -33,7 +33,7 @@
 ;;(hidden-file-p ".toto.cpp")
 
 (defun header-directory-p (dir)
-  (yba-some
+  (yba/some
    (mapcar
     (lambda (file-name)
       (when (not (hidden-file-p file-name))
@@ -171,6 +171,10 @@ the root for the path."
 (blink-cursor-mode 1)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
+
+;; yba lun. 24 mars 2014 11:07:02 CET
+(setq calendar-week-start-day 1)
+
 ;; yba Sam 13 jul 14:11:52 2013
 ;;
 ;; ffap does rebind C-x C-f to 'find-file-at-point which goes in the
@@ -661,13 +665,13 @@ the optional argument: force-reverting to true."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sat Jul 13 16:00:59 2013
 (defun yba/enable-hl-sexp-mode ()
-  (message "YBA-ENABLE-HL-SEXP-MODE")
+  (message "YBA/ENABLE-HL-SEXP-MODE")
   (setq global-hl-line-mode nil)
   (when (fboundp 'hl-sexp-mode)
     (hl-sexp-mode)))
 
-(add-hook 'lisp-mode-hook 'yba-enable-hl-sexp-mode)
-(add-hook 'emacs-lisp-mode-hook 'yba-enable-hl-sexp-mode)
+(add-hook 'lisp-mode-hook 'yba/enable-hl-sexp-mode)
+(add-hook 'emacs-lisp-mode-hook 'yba/enable-hl-sexp-mode)
 
 ;; yba ven. 20 sept. 2013 12:42:10 CEST
 (add-hook 'lisp-mode-hook 'turn-on-eldoc-mode)
@@ -938,7 +942,7 @@ followed by 'eval-buffer invoking."
 (defun yba/kill-buffers ()
   "Kill buffers related to a file, whose filename match against the regexp."
   (interactive)
-  (let ((workplace-name (ido-completing-read "Workplace? " (yba-list-workplaces))))
+  (let ((workplace-name (ido-completing-read "Workplace? " (yba/list-workplaces))))
     (when workplace-name
       (let ((count-killed-buffers
              (length (mapcar
@@ -1025,7 +1029,29 @@ followed by 'eval-buffer invoking."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba lun. 16 déc. 2013 16:39:34 CET
 (global-set-key (kbd "<f11>") 'magit-status)
-(global-set-key (kbd "<f12>") 'compile)
+(global-set-key (kbd "<f12>") 'yba/compile)
+
+;; yba lun. 24 mars 2014 16:58:40 CET
+(defun yba/deduce-compile-cmd (buffer-file-name)
+  (if (string-match "\\(/home/ybaumes/git/[^/]+/\\).*" buffer-file-name)
+      (progn
+        (message "HERE2 %s." (match-string 1 buffer-file-name))
+        (let ((build-dir (concat
+                          "make -j 10 -C "
+                          (match-string 1 buffer-file-name)
+                          "/build/debug/")))
+          (message "BUILD REPO IS %s." build-dir)
+          build-dir))
+    (progn
+      (message "HERE3")
+      "make -k")))
+
+(defun yba/compile ()
+  (interactive)
+  (message "HERE")
+  (message "TOTO")
+  (compile (yba/deduce-compile-cmd (buffer-file-name))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mar. 17 déc. 2013 11:45:34 CET
