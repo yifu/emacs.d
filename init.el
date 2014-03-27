@@ -1034,24 +1034,15 @@ followed by 'eval-buffer invoking."
 ;; yba lun. 24 mars 2014 16:58:40 CET
 (defun yba/deduce-compile-cmd (buffer-file-name)
   (if (string-match "\\(/home/ybaumes/git/[^/]+/\\).*" buffer-file-name)
-      (progn
-        (message "HERE2 %s." (match-string 1 buffer-file-name))
-        (let ((build-dir (concat
-                          "make -j 10 -C "
-                          (match-string 1 buffer-file-name)
-                          "/build/debug/")))
-          (message "BUILD REPO IS %s." build-dir)
-          build-dir))
-    (progn
-      (message "HERE3")
-      "make -k")))
+      (concat "make -j 10 -C " (match-string 1 buffer-file-name) "/build/debug/ "
+              "&& notify-send \"EMACS COMPILATION HAS JUST ENDED.\"")
+    "make -k"))
 
-(defun yba/compile ()
-  (interactive)
-  (message "HERE")
-  (message "TOTO")
-  (compile (yba/deduce-compile-cmd (buffer-file-name))))
-
+(defun yba/compile (&optional arg)
+  (interactive "P")
+  (if arg
+      (call-interactively 'compile)
+    (compile (yba/deduce-compile-cmd (buffer-file-name)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mar. 17 déc. 2013 11:45:34 CET
