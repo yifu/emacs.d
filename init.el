@@ -1003,7 +1003,7 @@ followed by 'eval-buffer invoking."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mar. 12 nov. 2013 12:12:44 CET
-(defun telnet-tcp-at-pt ()
+(defun yba/telnet-tcp-at-pt ()
   "When inside a gxalite configuration file, place the point over a tcp coordinate in order to telnet it."
   (interactive)
   (telnet
@@ -1013,9 +1013,9 @@ followed by 'eval-buffer invoking."
      (let ((host (match-string 1 things))
            (port (match-string 2 things)))
        (message "%s %s " host port)))))
-(defun define-telnet-key ()
-  (define-key nxml-mode-map "\C-c f" 'telnet-tcp-at-pt))
-(add-hook 'nxml-mode-hook 'define-telnet-key)
+(defun yba/define-telnet-key ()
+  (define-key nxml-mode-map "\C-c f" 'yba/telnet-tcp-at-pt))
+(add-hook 'nxml-mode-hook 'yba/define-telnet-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba ven. 22 nov. 2013 10:38:39 CET
