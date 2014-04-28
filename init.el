@@ -1156,6 +1156,16 @@ followed by 'eval-buffer invoking."
     (replace-match "[\"\\1\", 0]")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lun. 28 avril 2014 13:35:14 CEST
+(defun yba/calendar-iso-week-string ()
+  "String of ISO week number of Gregorian DATE."
+  (format "W%02d "
+	  (extract-calendar-month
+	   (calendar-iso-from-absolute
+	    (calendar-absolute-from-gregorian
+             (calendar-current-date))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mer. 08 janv. 2014 11:34:08 CET
 (eval-when-compile    (require 'color-theme))
 (defun my-color-theme ()
