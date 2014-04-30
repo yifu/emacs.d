@@ -957,6 +957,25 @@ followed by 'eval-buffer invoking."
             (message "No buffer matches. ")
           (message "A result of %i buffers has been killed. " count-killed-buffers))))))
 
+(defun yba/revert-buffers ()
+  "Revert buffers related to a file, whose filename match against the regexp."
+  (interactive)
+  (let ((workplace-name (ido-completing-read "Workplace? " (yba/list-workplaces))))
+    (when workplace-name
+      (let ((count-reverted-buffers
+             (length (mapcar
+                      #'revert-buffer
+                      (remove-if-not
+                       (lambda (x)
+                         (and
+                          (buffer-file-name x)
+                          (string-match workplace-name (buffer-file-name x))))
+                       (buffer-list))))))
+        (if (zerop count-reverted-buffers)
+            (message "No buffer matches. ")
+          (message "A result of %i buffers has been reverted. " count-reverted-buffers))))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba ven. 25 oct. 2013 10:07:24 CEST
 (defun add-elts-to-list (list-var &rest elt-list)
