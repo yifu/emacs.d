@@ -182,7 +182,7 @@ the root for the path."
 ;;C-x C-f before rebinding it to 'ido-find-file.  (ffap-bindings)
 (setq-default indent-tabs-mode nil)
 ;; yba jeu. 23 janv. 2014 10:31:16 CET
-(toggle-frame-fullscreen)
+;;(toggle-frame-fullscreen)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Mon Jul 29 22:44:26 2013
@@ -236,20 +236,20 @@ the root for the path."
 
 ;; yba Sun Jul  7 19:22:51 2013
 ;;(require 'auto-complete-config)
-(add-hook 'after-init-hook ;eval-after-load "auto-complete"
-          (lambda ()
-            (when (require 'auto-complete-config nil :no-error)
-              (require 'find-func)
-              (add-to-list
-               'ac-dictionary-directories
-               (expand-file-name
-                (concat
-                 (file-name-directory
-                  (find-library-name "auto-complete"))
-                 "dict/")))
-              (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-              (setq ac-quick-help-delay 0.5)
-              (ac-config-default))))
+;; (add-hook 'after-init-hook ;eval-after-load "auto-complete"
+;;           (lambda ()
+;;             (when (require 'auto-complete-config nil :no-error)
+;;               (require 'find-func)
+;;               (add-to-list
+;;                'ac-dictionary-directories
+;;                (expand-file-name
+;;                 (concat
+;;                  (file-name-directory
+;;                   (find-library-name "auto-complete"))
+;;                  "dict/")))
+;;               (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+;;               (setq ac-quick-help-delay 0.5)
+;;               (ac-config-default))))
 
 ;; yba Sun Jul  7 23:43:44 2013
 ;;(require 'ac-slime)
@@ -394,6 +394,18 @@ the optional argument: force-reverting to true."
 (global-set-key (kbd "C-c c") 'compile)
 (setq hs-isearch-open t)
 (add-to-list 'auto-mode-alist '("pdk-software.*\\.h\\'" . c++-mode))
+
+(setq fci-rule-column 80)
+(load-file (expand-file-name "~/fill-column-indicator.el"))
+(require 'fill-column-indicator)
+(add-hook 'c-mode-hook (lambda () (fci-mode)))
+(add-hook 'c++-mode-hook (lambda () (fci-mode)))
+
+(add-to-list 'load-path "~/yasnippet")
+(require 'yasnippet)
+(yas-reload-all)
+(add-hook 'c-mode-hook (lambda () (yas-minor-mode)))
+(add-hook 'c++-mode-hook (lambda () (yas-minor-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FLYMAKE
@@ -574,9 +586,10 @@ the optional argument: force-reverting to true."
   ;; (add-to-list
   ;;  'package-archives
   ;;  '("melpa" . "http://melpa.milkbox.net/packages/") 'append)
-  (add-to-list
-   'package-archives
-   '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
+
+  ;; (add-to-list
+  ;;  'package-archives
+  ;;  '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
 
   ;; yba lun. 08 juil. 2013 13:21:17 BST
   ;; Calling 'package-initialize is necessary for being able to call
@@ -706,65 +719,65 @@ followed by 'eval-buffer invoking."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Wed May  8 18:03:32 2013
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
 
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (let ((url
-             (concat
-              "https://raw.github.com/"
-              "dimitri/el-get/master/el-get-install.el")))
-        (url-retrieve-synchronously url))
-    (let (el-get-install-skip-emacswiki-recipes)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
+;; (unless (require 'el-get nil 'noerror)
+;;   (with-current-buffer
+;;       (let ((url
+;;              (concat
+;;               "https://raw.github.com/"
+;;               "dimitri/el-get/master/el-get-install.el")))
+;;         (url-retrieve-synchronously url))
+;;     (let (el-get-install-skip-emacswiki-recipes)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp))))
 
-(add-to-list 'el-get-recipe-path
- (expand-file-name "~/.emacs.d/el-get-user/recipes"))
+;; (add-to-list 'el-get-recipe-path
+;;  (expand-file-name "~/.emacs.d/el-get-user/recipes"))
 
-(setq el-get-user-package-directory
-      (expand-file-name "~/.emacs.d/el-get-init-files/"))
+;; (setq el-get-user-package-directory
+;;       (expand-file-name "~/.emacs.d/el-get-init-files/"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Mon Jul 15 01:07:50 2013
 ;;
 ;; el-get helper functions
-(setq my-el-get-installed-packages-filename
-      (expand-file-name "~/.emacs.d/my-el-get-installed-packages"))
+;; (setq my-el-get-installed-packages-filename
+;;       (expand-file-name "~/.emacs.d/my-el-get-installed-packages"))
 
-(defun save-my-el-get-packages-list (package)
-  (interactive)
-  (with-temp-buffer
-    (insert
-     (with-output-to-string
-       (prin1 (el-get-list-package-names-with-status "installed"))))
-    (write-file my-el-get-installed-packages-filename)))
+;; (defun save-my-el-get-packages-list (package)
+;;   (interactive)
+;;   (with-temp-buffer
+;;     (insert
+;;      (with-output-to-string
+;;        (prin1 (el-get-list-package-names-with-status "installed"))))
+;;     (write-file my-el-get-installed-packages-filename)))
 
-(defun load-my-el-get-package-list ()
-  (with-temp-buffer
-    (insert-file-contents my-el-get-installed-packages-filename)
-    (read (current-buffer))))
+;; (defun load-my-el-get-package-list ()
+;;   (with-temp-buffer
+;;     (insert-file-contents my-el-get-installed-packages-filename)
+;;     (read (current-buffer))))
 
-(add-hook 'el-get-post-init-hooks 'save-my-el-get-packages-list)
+;; (add-hook 'el-get-post-init-hooks 'save-my-el-get-packages-list)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Finally, load the packages
-(let ((el-get-dir (expand-file-name "~/.emacs.d/el-get/")))
-  (if (or
-       (not (file-exists-p el-get-dir))
-       (my-packages-too-old-p el-get-dir))
-      (progn
-        (add-hook
-         'after-init-hook
-         (lambda ()
-           (message "INIT.EL: Upgrading el-get packages.")
-           (el-get-self-update)
-           (el-get 'sync (load-my-el-get-package-list))
-           (touch-dir el-get-dir)
-           (message "INIT.EL: Upgrading el-get packages done."))))
-    (progn
-      (message "INIT.EL: Syncing el-get.")
-      (add-hook 'after-init-hook (lambda () (el-get 'sync))))))
+;; (let ((el-get-dir (expand-file-name "~/.emacs.d/el-get/")))
+;;   (if (or
+;;        (not (file-exists-p el-get-dir))
+;;        (my-packages-too-old-p el-get-dir))
+;;       (progn
+;;         (add-hook
+;;          'after-init-hook
+;;          (lambda ()
+;;            (message "INIT.EL: Upgrading el-get packages.")
+;;            (el-get-self-update)
+;;            (el-get 'sync (load-my-el-get-package-list))
+;;            (touch-dir el-get-dir)
+;;            (message "INIT.EL: Upgrading el-get packages done."))))
+;;     (progn
+;;       (message "INIT.EL: Syncing el-get.")
+;;       (add-hook 'after-init-hook (lambda () (el-get 'sync))))))
 
 ;; * smartparens - for moving about and making lists and stuff
 ;; * litable - for the funky eval stuff you see going on
@@ -903,7 +916,6 @@ followed by 'eval-buffer invoking."
 ;; IMPORTANT RESCUE MODE FOR MAGIT
 ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/magit-1.2.0"))
 ;; (require 'magit)
-(global-set-key (kbd "C-c g") 'magit-status)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mer. 04 sept. 2013 14:36:21 CEST
@@ -1004,12 +1016,12 @@ followed by 'eval-buffer invoking."
 (setq redisplay-dont-pause t
       scroll-margin 1
       scroll-step 1
-      scroll-conservatively 10000
+      scroll-conservatively 99
       scroll-preserve-screen-position 1)
 (setq mouse-wheel-follow-mouse 't)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
-(setq kill-ring-max 1000)
+(setq kill-ring-max 10000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba Sun Nov  3 13:52:35 2013
@@ -1040,11 +1052,6 @@ followed by 'eval-buffer invoking."
 ;; yba ven. 22 nov. 2013 10:38:39 CET
 (global-set-key (kbd "C-z") (lambda () (interactive) (message "Do nothing.")))
 
-(require 'yasnippet)
-;;(require 'auto-complete-yasnippet)
-(yas-global-mode 1)
-;;(setq ac-source-yasnippet nil)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba lun. 16 déc. 2013 16:39:34 CET
 (global-set-key (kbd "<f11>") 'magit-status)
@@ -1053,7 +1060,7 @@ followed by 'eval-buffer invoking."
 ;; yba lun. 24 mars 2014 16:58:40 CET
 (defun yba/deduce-compile-cmd (buffer-file-name)
   (if (string-match "\\(/home/ybaumes/git/[^/]+/\\).*" buffer-file-name)
-      (concat "make -j 10 -C " (match-string 1 buffer-file-name) "/build/debug/ "
+      (concat "make -j 10 all-ctp -C " (match-string 1 buffer-file-name) "/build/debug/ "
               "&& notify-send \"EMACS COMPILATION HAS JUST ENDED.\"")
     "make -k"))
 
@@ -1151,12 +1158,19 @@ followed by 'eval-buffer invoking."
         (message "IN THE LET")
         (from-c-struct-to-cmp-fun beg-struct end-struct)))))
 
-(global-set-key (kbd "<f8>") (lambda () (interactive) (insert "uint8_t")))
-(global-set-key (kbd "<f6>") (lambda () (interactive) (insert "uint16_t")))
-(global-set-key (kbd "<f2>") (lambda () (interactive) (insert "uint32_t")))
-(global-set-key (kbd "<f4>") (lambda () (interactive) (insert "uint64_t")))
-(global-set-key (kbd "<f10>") 'multiple-c-struct-to-cmp-fun)
+;; (global-set-key (kbd "<f8>") (lambda () (interactive) (insert "uint8_t")))
+;; (global-set-key (kbd "<f6>") (lambda () (interactive) (insert "uint16_t")))
+;; (global-set-key (kbd "<f2>") (lambda () (interactive) (insert "uint32_t")))
+;; (global-set-key (kbd "<f4>") (lambda () (interactive) (insert "uint64_t")))
+;; (global-set-key (kbd "<f10>") 'multiple-c-struct-to-cmp-fun)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun yba/run-ctags ()
+  (interactive)
+  (call-process-shell-command
+   "cd ~/git/master/; ctags-exuberant -e -R ."))
+(global-set-key (kbd "<f10>") 'yba/run-ctags)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba jeu. 23 janv. 2014 11:52:34 CET
@@ -1383,7 +1397,6 @@ followed by 'eval-buffer invoking."
      (yas-field-highlight-face ((t (:background "blue3"))))
      (yba/boolean-keywords-face ((t (:bold t :background "cyan" :foreground "red" :weight bold)))))))
 (add-to-list 'color-themes '(my-color-theme  "THEME NAME" "YOUR NAME"))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (eq 'gnu/linux system-type)
