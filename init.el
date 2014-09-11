@@ -1,5 +1,6 @@
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq split-height-threshold nil)
+(setq split-width-threshold 130)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba jeu. 04 juil. 2013 14:47:58 CEST
 (server-start)
 
@@ -234,30 +235,13 @@ the root for the path."
 
 ;;(setq org-todo-keywords '((type "DISCARD" "TODO" "DONE")))
 
-;; yba Sun Jul  7 19:22:51 2013
-;;(require 'auto-complete-config)
-;; (add-hook 'after-init-hook ;eval-after-load "auto-complete"
-;;           (lambda ()
-;;             (when (require 'auto-complete-config nil :no-error)
-;;               (require 'find-func)
-;;               (add-to-list
-;;                'ac-dictionary-directories
-;;                (expand-file-name
-;;                 (concat
-;;                  (file-name-directory
-;;                   (find-library-name "auto-complete"))
-;;                  "dict/")))
-;;               (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-;;               (setq ac-quick-help-delay 0.5)
-;;               (ac-config-default))))
-
 ;; yba Sun Jul  7 23:43:44 2013
 ;;(require 'ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-(eval-after-load "auto-complete"
-  '(progn
-     (add-to-list 'ac-modes 'slime-repl-mode)))
+;; (eval-after-load "auto-complete"
+;;   '(progn
+;;      (add-to-list 'ac-modes 'slime-repl-mode)))
 
 (load (expand-file-name "~/github/stumpwm/contrib/stumpwm-mode.el"))
 (setq stumpwm-shell-program (expand-file-name "~/github/stumpwm/contrib/stumpish"))
@@ -1031,6 +1015,41 @@ followed by 'eval-buffer invoking."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba lun. 04 nov. 2013 18:39:26 CET
 (setq trash-directory (expand-file-name "~/trash/"))
+
+;; (fset 'comment-channel
+;;    (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([0 5 134217848 99 111 109 109 101 110 116 45 114 101 103 105 111 110 13 1 21 52 55 14 0 27 79 66 27 79 65 5 27 120 27 112 13 1 21 52 55 14 14 14 14 14 0 5 134217848 99 111 109 109 101 110 116 45 114 101 103 105 111 110 13 24 19] 0 "%d")) arg)))
+
+(defun yba/comment-channel ()
+  (re-search-forward "20140611\\(_[0-9]+\\)" )
+  (let ((name (match-string 1)))
+    (comment-region (line-beginning-position) (line-end-position))
+    (search-forward (concat name "NA.pcap"))
+    (comment-region (line-beginning-position) (line-end-position))
+    (search-forward (concat name "SA.pcap"))
+    (comment-region (line-beginning-position) (line-end-position))))
+
+(defun yba/uncomment-channel ()
+  (re-search-forward "20140611\\(_[0-9]+\\)" )
+  (let ((name (match-string 1)))
+    (uncomment-region (line-beginning-position) (line-end-position))
+    (search-forward (concat name "NA.pcap"))
+    (uncomment-region (line-beginning-position) (line-end-position))
+    (search-forward (concat name "SA.pcap"))
+    (uncomment-region (line-beginning-position) (line-end-position))))
+
+;; (fset 'uncomment-channel
+;;    (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote (" xuncomment-region47 OBOAxp47 xp" 0 "%d")) arg)))
+
+(defun yba/next-channel ()
+  (interactive)
+  (let ((save-point (point)))
+    (save-excursion
+      (save-excursion
+        (yba/comment-channel))
+      (next-line)
+      (yba/uncomment-channel))
+    (goto-char save-point)
+    (next-line)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; yba mar. 12 nov. 2013 12:12:44 CET
