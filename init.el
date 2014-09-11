@@ -304,7 +304,7 @@ the optional argument: force-reverting to true."
                 (substatement . +)      ; Guessed value
                 (substatement-open . 0) ; Guessed value
                 (topmost-intro . 0)     ; Guessed value
-                (access-label . 0)
+                (access-label . -)
                 (annotation-top-cont . 0)
                 (annotation-var-cont . +)
                 (arglist-close . c-lineup-close-paren)
