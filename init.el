@@ -1,11 +1,14 @@
 
+
 (server-start)
 (require 'package)
 ;;(setq package-archives '())
-;; (add-to-list 'package-archives
-;;              '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
 (add-to-list 'package-archives
-  '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+             '("gnu" . "http://elpa.gnu.org/packages/") 'append)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") 'append)
+;; (add-to-list 'package-archives
+;;   '("melpa-stable" . "http://melpa.org/packages/") t)
 (package-initialize)
 (add-to-list 'custom-theme-load-path "/home/ybaumes/.emacs.d/elpa/ample-theme-0.12")
 (load-theme 'tango-dark t)
@@ -145,7 +148,7 @@ the optional argument: force-reverting to true."
                 (extern-lang-open . 0)
                 (friend . 0)
                 (func-decl-cont . +)
-                (inclass . ++)
+                (inclass . +)
                 (incomposition . +)
                 (inexpr-class . 0)
                 (inexpr-statement . +)
@@ -225,6 +228,12 @@ the optional argument: force-reverting to true."
 ;;(setq compilation-auto-jump-to-first-error t)
 ;;(setq minimap-window-location 'left)
 
+;; (add-hook 'c-mode-common-hook
+;;           (lambda ()
+;;             (if (derived-mode-p 'c-mode 'c++-mode)
+;;                 (cppcm-reload-all)
+;;               )))
+
 
 (load (expand-file-name "~/quicklisp/slime-helper.el") t)
 (add-hook 'lisp-mode-hook
@@ -255,16 +264,27 @@ the optional argument: force-reverting to true."
 (global-set-key (kbd "C-z") (lambda () (interactive) (message "Do nothing.")))
 (global-set-key (kbd "<f11>") 'magit-status)
 (global-set-key (kbd "<f12>") 'yba/compile)
-(defun yba/deduce-compile-cmd (buffer-file-name)
-  (if (string-match "\\(/home/ybaumes/git/[^/]+/\\).*" buffer-file-name)
-      (concat "make -j 10  -C " (match-string 1 buffer-file-name) "/build/debug/ "
+(defun yba/deduce-compile-debug-cmd (buffer-file-name)
+  (if (string-match "\\(/home/ybaumes/user/[^/]+/\\|/home/ybaumes/release/\\|/home/ybaumes/\\)\\([^/]+\\).*" buffer-file-name)
+      (progn
+       (message (match-string 2 buffer-file-name))
+       (message (match-string 1 buffer-file-name))
+       (concat "make -j 10  -C " (match-string 1 buffer-file-name) (match-string 2 buffer-file-name) "/build/debug   "
+               "&& notify-send \"EMACS COMPILATION HAS JUST ENDED.\""))
+        "make -k"))
+
+(defun yba/deduce-compile-release-cmd (buffer-file-name)
+  (if (string-match "\\(/home/ybaumes/[^/]+/\\).*" buffer-file-name)
+      (concat "make -j 10  -C " (match-string 1 buffer-file-name) "/build/release gxalite_launcher gxalite_api gxalite_cme "
               "&& notify-send \"EMACS COMPILATION HAS JUST ENDED.\"")
     "make -k"))
+
 (defun yba/compile (&optional arg)
   (interactive "P")
   (if arg
-      (call-interactively 'compile)
-    (compile (yba/deduce-compile-cmd (buffer-file-name)))))
+      (compile (yba/deduce-compile-release-cmd (buffer-file-name)))
+    (compile (yba/deduce-compile-debug-cmd (buffer-file-name)))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -272,7 +292,10 @@ the optional argument: force-reverting to true."
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("244e7fdb99a627bfdca1a98860109f7c7f551d7cfb9eec201a65850fdeea34a6" default))))
+    ("756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "244e7fdb99a627bfdca1a98860109f7c7f551d7cfb9eec201a65850fdeea34a6" default)))
+ '(package-selected-packages
+   (quote
+    (deferred f w3m virtualenv smart-mode-line rainbow-mode rainbow-delimiters paredit nrepl minimap magit icicles hl-sexp helm-gtags git-gutter-fringe ggtags fill-column-indicator elpy cpputils-cmake column-marker color-theme-vim-insert-mode color-theme-twilight color-theme-solarized color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme-monokai color-theme-molokai color-theme-emacs-revert-theme color-theme-dawn-night browse-kill-ring apt-utils ample-theme ac-slime ac-nrepl))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -280,21 +303,18 @@ the optional argument: force-reverting to true."
  ;; If there is more than one, they won't work right.
  )
 
-
 (defun yba/list-workplaces ()
-  "List of currently open workplaces in the ~/git/ directory or on a remote machine accessed via /ssh:.../."
+  "List of currently open workplaces in the ~/ directory or on a remote machine accessed via /ssh:.../."
   (interactive)
-  (remove-duplicates
    (remove
     nil
-    (mapcar
-     (lambda (file-name)
-       (when (string-match "/\\(git/\\|ssh:\\)\\([^/:]+\\)" file-name)
-         (match-string-no-properties 2 file-name)))
-     (remove
-      nil
-      (mapcar #'buffer-file-name (buffer-list)))))
-   :test #'string-equal))
+    (delete-dups
+     (mapcar
+      (lambda (file-name)
+        (when file-name
+          (when (string-match "\\(/home/ybaumes/user/\\|/home/ybaumes/release/\\|/home/ybaumes/\\|/ssh:\\)\\([^/:]+\\)" file-name)
+            (match-string-no-properties 2 file-name))))
+      (mapcar #'buffer-file-name (buffer-list))))))
 
 (defun yba/revert-buffers ()
   "Revert buffers related to a file, whose filename match against the regexp."
@@ -306,3 +326,16 @@ the optional argument: force-reverting to true."
         (with-current-buffer buf
           (revert-buffer :ignore-auto :no-confirm))))))
 
+(defun yba/kill-buffers ()
+  "Revert buffers related to a file, whose filename match against the regexp."
+  (interactive)
+  (let ((workplace-name (ido-completing-read "Workplace? " (yba/list-workplaces))))
+    (dolist (buf (buffer-list))
+      (when (and (buffer-file-name buf)
+                 (string-match workplace-name (buffer-file-name buf)))
+          (kill-buffer buf)))))
+
+;; (add-to-list 'load-path "~/emacs-ycmd")
+;; (require 'ycmd)
+;; (add-hook 'c++-mode-hook 'ycmd-mode)
+;; (set-variable 'ycmd-server-command '("python" "/home/ybaumes/ycmd/ycmd/"))
