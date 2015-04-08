@@ -221,6 +221,8 @@ the optional argument: force-reverting to true."
 (yas-reload-all)
 (add-hook 'c-mode-hook (lambda () (yas-minor-mode)))
 (add-hook 'c++-mode-hook (lambda () (yas-minor-mode)))
+;; (add-hook 'c-mode-hook (lambda () (company-mode)))
+;; (add-hook 'c++-mode-hook (lambda () (company-mode)))
 (global-set-key [f2] 'flymake-display-err-menu-for-current-line)
 (global-set-key [f3] 'flymake-goto-prev-error)
 (global-set-key [f4] 'flymake-goto-next-error)
@@ -265,7 +267,7 @@ the optional argument: force-reverting to true."
 (global-set-key (kbd "<f11>") 'magit-status)
 (global-set-key (kbd "<f12>") 'yba/compile)
 (defun yba/deduce-compile-debug-cmd (buffer-file-name)
-  (if (string-match "\\(/home/ybaumes/user/[^/]+/\\|/home/ybaumes/release/\\|/home/ybaumes/\\)\\([^/]+\\).*" buffer-file-name)
+  (if (string-match "\\(/home/ybaumes/feature/\\|/home/ybaumes/user/[^/]+/\\|/home/ybaumes/release/\\|/home/ybaumes/\\)\\([^/]+\\).*" buffer-file-name)
       (progn
        (message (match-string 2 buffer-file-name))
        (message (match-string 1 buffer-file-name))
@@ -292,10 +294,10 @@ the optional argument: force-reverting to true."
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "244e7fdb99a627bfdca1a98860109f7c7f551d7cfb9eec201a65850fdeea34a6" default)))
+    ("6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "244e7fdb99a627bfdca1a98860109f7c7f551d7cfb9eec201a65850fdeea34a6" default)))
  '(package-selected-packages
    (quote
-    (deferred f w3m virtualenv smart-mode-line rainbow-mode rainbow-delimiters paredit nrepl minimap magit icicles hl-sexp helm-gtags git-gutter-fringe ggtags fill-column-indicator elpy cpputils-cmake column-marker color-theme-vim-insert-mode color-theme-twilight color-theme-solarized color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme-monokai color-theme-molokai color-theme-emacs-revert-theme color-theme-dawn-night browse-kill-ring apt-utils ample-theme ac-slime ac-nrepl))))
+    (company-cmake deferred f w3m virtualenv smart-mode-line rainbow-mode rainbow-delimiters paredit nrepl minimap magit icicles hl-sexp helm-gtags git-gutter-fringe ggtags fill-column-indicator elpy cpputils-cmake column-marker color-theme-vim-insert-mode color-theme-twilight color-theme-solarized color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-theme-monokai color-theme-molokai color-theme-emacs-revert-theme color-theme-dawn-night browse-kill-ring apt-utils ample-theme ac-slime ac-nrepl))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -312,7 +314,7 @@ the optional argument: force-reverting to true."
      (mapcar
       (lambda (file-name)
         (when file-name
-          (when (string-match "\\(/home/ybaumes/user/\\|/home/ybaumes/release/\\|/home/ybaumes/\\|/ssh:\\)\\([^/:]+\\)" file-name)
+          (when (string-match "\\(/home/ybaumes/feature/\\|/home/ybaumes/user/\\|/home/ybaumes/release/\\|/home/ybaumes/\\|/ssh:\\)\\([^/:]+\\)" file-name)
             (match-string-no-properties 2 file-name))))
       (mapcar #'buffer-file-name (buffer-list))))))
 
